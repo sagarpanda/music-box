@@ -7,7 +7,8 @@ class BaseLayout extends React.Component {
     state = {
         drawerActive: false,
         drawerPinned: false,
-        sidebarPinned: false
+        sidebarPinned: false,
+        winHeight: window.innerHeight
     };
 
     toggleDrawerActive = () => {
@@ -22,8 +23,20 @@ class BaseLayout extends React.Component {
         this.setState({ sidebarPinned: !this.state.sidebarPinned });
     };
 
+    updateDimensions = () =>{
+        this.setState({ winHeight: window.innerHeight });
+    }
+
+    componentDidMount() {
+        window.addEventListener("resize", this.updateDimensions);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener("resize", this.updateDimensions);
+    }
+
     render() {
-        const xHeight = window.innerHeight - 100;
+        const xHeight = this.state.winHeight - 100;
         return (
             <Layout>
                 <NavDrawer active={this.state.drawerActive}
