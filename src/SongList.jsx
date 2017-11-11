@@ -25,7 +25,7 @@ class SongList extends Component {
     }
 
     handleChange(index) {
-        const song = { ...list[index] };
+        const song = { ...this.state.list[index] };
         this.props.onChange(song);
         this.setState({
             value: index
