@@ -1,9 +1,15 @@
 language: node_js
 node_js:
   - "6"
+env:
+  global:
+  - USER="sagarpanda"
+  - REPO="music-box"
+  - GH_REPO="github.com/${USER}/${REPO}.git"
 script:
   - npm run build
+  - git config --global user.email "${EMAIL}"
+  - git config --global user.name "${NAME}"
   - git subtree split --prefix public -b gh-pages
-  - git remote add origin https://${GITHUB_TOKEN}@github.com/sagarpanda/music-box.git
-  - git push -f origin gh-pages:gh-pages
+  - git push -f "https://${GITHUB_TOKEN}@${GH_REPO}" gh-pages:gh-pages > /dev/null 2>&1
   - git branch -D gh-pages
