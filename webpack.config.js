@@ -107,5 +107,5 @@ const config = {
   plugins: getPlugins(),
   devServer: { inline: true, port: 3000 }
 };
-console.log(JSON.stringify(config, null, 2));
+
 module.exports = config;
