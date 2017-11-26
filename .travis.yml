@@ -11,5 +11,5 @@ script:
   - git config --global user.email "${EMAIL}"
   - git config --global user.name "${NAME}"
   - git subtree split --prefix public -b gh-pages
-  - git push -f "https://${GITHUB_TOKEN}@${GH_REPO}" gh-pages:gh-pages > /dev/null 2>&1
+  - git push -f "https://${GITHUB_TOKEN}@${GH_REPO}" gh-pages:gh-pages
   - git branch -D gh-pages

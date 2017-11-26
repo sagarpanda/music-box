@@ -20,7 +20,6 @@ class App extends React.PureComponent {
     return (
       <BaseLayout>
         <div>
-          <div>Hello</div>
           <SongList onChange={this.onSongChange} />
           <Audio song={this.state.song} />
         </div>
