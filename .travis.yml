@@ -8,8 +8,10 @@ env:
   - GH_REPO="github.com/${USER}/${REPO}.git"
 script:
   - npm run build
-  - git config --global user.email "${EMAIL}"
-  - git config --global user.name "${NAME}"
-  - git subtree split --prefix public -b gh-pages
-  - git push -f "https://${GITHUB_TOKEN}@${GH_REPO}" gh-pages:gh-pages
-  - git branch -D gh-pages
+deploy:
+  provider: pages
+  skip_cleanup: true
+  local_dir: "public"
+  github_token: $GITHUB_TOKEN # Set in travis-ci.org dashboard
+  on:
+    branch: master
