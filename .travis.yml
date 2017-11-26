@@ -1,18 +1,20 @@
 language: node_js
 node_js:
   - "6"
-env:
-  global:
-  - USER="sagarpanda"
-  - REPO="music-box"
-  - GH_REPO="github.com/${USER}/${REPO}.git"
 script:
   - npm run build
-deploy:
-  provider: pages
-  skip_cleanup: true
-  local_dir: "public"
-  github_token: $GITHUB_TOKEN
-  commit_message: 'Travis CI'
-  on:
-    branch: master
+#deploy:
+#  provider: pages
+#  skip_cleanup: true
+#  local_dir: "public"
+#  github_token: $GITHUB_TOKEN
+#  on:
+#    branch: master
+after_success:
+  - git config --global user.email "er.sagarpanda@gmail.com"
+  - git config --global user.name "Sagar Panda"
+  - git remote rm origin
+  - git remote add origin https://sagarpanda:$GITHUB_TOKEN@github.com/sagarpanda/music-box.git
+  - git add -A
+  - git commit -m "Travis $TRAVIS_BUILD_NUMBER pushed"
+  - git push origin master
