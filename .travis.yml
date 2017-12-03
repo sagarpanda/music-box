@@ -2,11 +2,11 @@ language: node_js
 node_js:
   - "6"
 script:
+  - git checkout master
   - npm run build
+  - chmod +x deploy.sh
 deploy:
-  provider: pages
-  skip_cleanup: true
-  local_dir: "public"
-  github_token: $GITHUB_TOKEN
+  provider: script
+  script: ./deploy.sh
   on:
     branch: master
