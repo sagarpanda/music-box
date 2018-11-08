@@ -9985,6 +9985,38 @@ exports.default = _default;
 
 /***/ }),
 
+/***/ "./node_modules/@material-ui/icons/Pause.js":
+/*!**************************************************!*\
+  !*** ./node_modules/@material-ui/icons/Pause.js ***!
+  \**************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@material-ui/icons/node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var _createSvgIcon = _interopRequireDefault(__webpack_require__(/*! ./utils/createSvgIcon */ "./node_modules/@material-ui/icons/utils/createSvgIcon.js"));
+
+var _default = (0, _createSvgIcon.default)(_react.default.createElement(_react.default.Fragment, null, _react.default.createElement("path", {
+  d: "M6 19h4V5H6v14zm8-14v14h4V5h-4z"
+}), _react.default.createElement("path", {
+  fill: "none",
+  d: "M0 0h24v24H0z"
+})), 'Pause');
+
+exports.default = _default;
+
+/***/ }),
+
 /***/ "./node_modules/@material-ui/icons/PlayArrow.js":
 /*!******************************************************!*\
   !*** ./node_modules/@material-ui/icons/PlayArrow.js ***!
@@ -41504,6 +41536,101 @@ exports.default = (0, _styles.withStyles)(styles)(App);
 
 /***/ }),
 
+/***/ "./src/AudioNative.jsx":
+/*!*****************************!*\
+  !*** ./src/AudioNative.jsx ***!
+  \*****************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _styles = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/styles/index.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var styles = {
+  hiddenPlayer: {
+    display: 'none'
+  }
+};
+
+var AudioNative = function (_Component) {
+  _inherits(AudioNative, _Component);
+
+  function AudioNative(props) {
+    _classCallCheck(this, AudioNative);
+
+    var _this = _possibleConstructorReturn(this, (AudioNative.__proto__ || Object.getPrototypeOf(AudioNative)).call(this, props));
+
+    _this.state = {};
+    return _this;
+  }
+
+  _createClass(AudioNative, [{
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate() {
+      return false;
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var classes = this.props.classes;
+
+      var path = 'http://data2.mymp3singer.fun/files/sfd144/71725/Manzoor%20E%20Khuda_64(MyMp3Singer).mp3';
+      return _react2.default.createElement(
+        'div',
+        { className: classes.hiddenPlayer },
+        _react2.default.createElement(
+          'audio',
+          {
+            controls: true,
+            preload: 'false',
+            ref: this.props.setElmRef
+          },
+          _react2.default.createElement('track', { kind: 'captions' }),
+          _react2.default.createElement('source', { src: path, type: 'audio/mpeg' }),
+          'Your browser does not support the audio element.'
+        )
+      );
+    }
+  }]);
+
+  return AudioNative;
+}(_react.Component);
+
+AudioNative.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
+  classes: _propTypes2.default.object.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  setElmRef: _propTypes2.default.func.isRequired
+};
+
+exports.default = (0, _styles.withStyles)(styles)(AudioNative);
+
+/***/ }),
+
 /***/ "./src/AudioPlayer.jsx":
 /*!*****************************!*\
   !*** ./src/AudioPlayer.jsx ***!
@@ -41558,6 +41685,10 @@ var _PlayArrow = __webpack_require__(/*! @material-ui/icons/PlayArrow */ "./node
 
 var _PlayArrow2 = _interopRequireDefault(_PlayArrow);
 
+var _Pause = __webpack_require__(/*! @material-ui/icons/Pause */ "./node_modules/@material-ui/icons/Pause.js");
+
+var _Pause2 = _interopRequireDefault(_Pause);
+
 var _SkipNext = __webpack_require__(/*! @material-ui/icons/SkipNext */ "./node_modules/@material-ui/icons/SkipNext.js");
 
 var _SkipNext2 = _interopRequireDefault(_SkipNext);
@@ -41566,6 +41697,10 @@ var _LinearProgress = __webpack_require__(/*! @material-ui/core/LinearProgress *
 
 var _LinearProgress2 = _interopRequireDefault(_LinearProgress);
 
+var _AudioNative = __webpack_require__(/*! ./AudioNative */ "./src/AudioNative.jsx");
+
+var _AudioNative2 = _interopRequireDefault(_AudioNative);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -41573,6 +41708,24 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+function getTimeLeft(currentTime, duration) {
+  var timeLeft = duration - currentTime;
+  var s = timeLeft % 60;
+  var m = Math.floor(timeLeft / 60) % 60;
+  s = s < 10 ? '0' + s : s;
+  m = m < 10 ? '0' + m : m;
+  var time = m + ':' + s;
+  return time;
+}
+function getFormattedTime(currentTime) {
+  var s = currentTime % 60;
+  var m = parseInt(currentTime / 60 % 60, 10);
+  s = s < 10 ? '0' + s : s;
+  m = m < 10 ? '0' + m : m;
+  var time = m + ':' + s;
+  return time;
+}
 
 var styles = function styles(theme) {
   return {
@@ -41604,6 +41757,9 @@ var styles = function styles(theme) {
       flex: 1,
       paddingTop: 101,
       paddingRight: 80
+    },
+    hiddenPlayer: {
+      display: 'none'
     }
   };
 };
@@ -41616,20 +41772,169 @@ var AudioPlayer = function (_Component) {
 
     var _this = _possibleConstructorReturn(this, (AudioPlayer.__proto__ || Object.getPrototypeOf(AudioPlayer)).call(this, props));
 
-    _this.state = {};
+    _this.state = {
+      isLoadedMetadata: false,
+      isPaused: true,
+      elapsedTime: '00:00',
+      duration: '00:00',
+      buffered: 0,
+      progress: 0
+    };
+    // Audio Events
+    _this.setElmRef = _this.setElmRef.bind(_this);
+    _this.handleAudioError = _this.handleAudioError.bind(_this);
+    _this.handleAudioCanPlay = _this.handleAudioCanPlay.bind(_this);
+    _this.handleAudioCanPlayThrough = _this.handleAudioCanPlayThrough.bind(_this);
+    _this.handleAudioPlay = _this.handleAudioPlay.bind(_this);
+    _this.handleAudioAbort = _this.handleAudioAbort.bind(_this);
+    _this.handleAudioEnded = _this.handleAudioEnded.bind(_this);
+    _this.handleAudioPause = _this.handleAudioPause.bind(_this);
+    _this.handleAudioSeeked = _this.handleAudioSeeked.bind(_this);
+    _this.handleAudioLoadedMetadata = _this.handleAudioLoadedMetadata.bind(_this);
+    _this.handleAudioTimeUpdate = _this.handleAudioTimeUpdate.bind(_this);
+    // Player Events
+    _this.handlePlayClick = _this.handlePlayClick.bind(_this);
     return _this;
   }
 
   _createClass(AudioPlayer, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      window.player = this;
+      this.eAudio.addEventListener('error', this.handleAudioError);
+
+      // When enough of the file has downloaded to start playing
+      this.eAudio.addEventListener('canplay', this.handleAudioCanPlay);
+
+      // When enough of the file has downloaded to play the entire file
+      this.eAudio.addEventListener('canplaythrough', this.handleAudioCanPlayThrough);
+
+      // When audio play starts
+      this.eAudio.addEventListener('play', this.handleAudioPlay);
+
+      // When unloading the audio player (switching to another src)
+      this.eAudio.addEventListener('abort', this.handleAudioAbort);
+
+      // When the file has finished playing to the end
+      this.eAudio.addEventListener('ended', this.handleAudioEnded);
+
+      // When the user pauses playback
+      this.eAudio.addEventListener('pause', this.handleAudioPause);
+
+      // When the user drags the time indicator to a new time
+      this.eAudio.addEventListener('seeked', this.handleAudioSeeked);
+
+      this.eAudio.addEventListener('loadedmetadata', this.handleAudioLoadedMetadata);
+
+      this.eAudio.addEventListener('timeupdate', this.handleAudioTimeUpdate);
+    }
+  }, {
+    key: 'setElmRef',
+    value: function setElmRef(elm) {
+      this.eAudio = elm;
+    }
+  }, {
+    key: 'handleAudioError',
+    value: function handleAudioError(e) {
+      // this.props.onError(e);
+      console.log('error', e, this.eAudio);
+    }
+  }, {
+    key: 'handleAudioCanPlay',
+    value: function handleAudioCanPlay(e) {
+      // this.props.onCanPlay(e);
+      console.log('canplay', e, this.eAudio);
+    }
+  }, {
+    key: 'handleAudioCanPlayThrough',
+    value: function handleAudioCanPlayThrough(e) {
+      // this.props.onCanPlayThrough(e);
+      console.log('canplaythrough', e, this.eAudio);
+    }
+  }, {
+    key: 'handleAudioPlay',
+    value: function handleAudioPlay() {
+      this.setState({ isPaused: false });
+    }
+  }, {
+    key: 'handleAudioAbort',
+    value: function handleAudioAbort(e) {
+      // this.props.onAbort(e);
+      console.log('abort', e, this.eAudio);
+    }
+  }, {
+    key: 'handleAudioEnded',
+    value: function handleAudioEnded(e) {
+      // this.props.onEnded(e);
+      console.log('ended', e, this.eAudio);
+    }
+  }, {
+    key: 'handleAudioPause',
+    value: function handleAudioPause() {
+      this.setState({ isPaused: true });
+    }
+  }, {
+    key: 'handleAudioSeeked',
+    value: function handleAudioSeeked(e) {
+      // this.props.onSeeked(e);
+      console.log('seeked', e, this.eAudio);
+    }
+  }, {
+    key: 'handleAudioLoadedMetadata',
+    value: function handleAudioLoadedMetadata(e) {
+      // this.props.onLoadedMetadata(e);
+      console.log('loadedmetadata', e);
+      var duration = parseInt(this.eAudio.duration, 10);
+      duration = getFormattedTime(duration);
+      this.setState({ isLoadedMetadata: true, duration: duration });
+    }
+  }, {
+    key: 'handleAudioTimeUpdate',
+    value: function handleAudioTimeUpdate() {
+      var duration = parseInt(this.eAudio.duration, 10);
+      var currentTime = parseInt(this.eAudio.currentTime, 10);
+      var elapsedTime = getFormattedTime(currentTime, duration);
+
+      var buffered = this.eAudio.buffered.end(0) * 100 / duration;
+      buffered = parseFloat(buffered.toFixed(2));
+
+      var progress = currentTime * 100 / duration;
+      progress = parseFloat(progress.toFixed(2));
+
+      this.setState({ elapsedTime: elapsedTime, progress: progress, buffered: buffered });
+    }
+  }, {
+    key: 'handlePlayClick',
+    value: function handlePlayClick() {
+      if (this.state.isPaused) {
+        this.eAudio.play();
+      } else {
+        this.eAudio.pause();
+      }
+    }
+  }, {
+    key: 'handlePauseClick',
+    value: function handlePauseClick() {
+      this.eAudio.pause();
+    }
+  }, {
     key: 'render',
     value: function render() {
       var _props = this.props,
           classes = _props.classes,
           theme = _props.theme;
+      var _state = this.state,
+          isLoadedMetadata = _state.isLoadedMetadata,
+          isPaused = _state.isPaused,
+          elapsedTime = _state.elapsedTime,
+          duration = _state.duration,
+          progress = _state.progress,
+          buffered = _state.buffered;
 
       return _react2.default.createElement(
         _Card2.default,
         { className: classes.card },
+        _react2.default.createElement(_AudioNative2.default, { setElmRef: this.setElmRef }),
         _react2.default.createElement(_CardMedia2.default, {
           className: classes.cover,
           image: 'https://i.imgur.com/aQs9CC6.jpg',
@@ -41649,7 +41954,10 @@ var AudioPlayer = function (_Component) {
             _react2.default.createElement(
               _Typography2.default,
               { variant: 'subtitle1', color: 'textSecondary' },
-              'Mac Miller'
+              'Mac Miller ',
+              elapsedTime,
+              ' / ',
+              duration
             )
           ),
           _react2.default.createElement(
@@ -41657,17 +41965,21 @@ var AudioPlayer = function (_Component) {
             { className: classes.controls },
             _react2.default.createElement(
               _IconButton2.default,
-              { 'aria-label': 'Previous' },
+              { disabled: !isLoadedMetadata, 'aria-label': 'Previous' },
               theme.direction === 'rtl' ? _react2.default.createElement(_SkipNext2.default, null) : _react2.default.createElement(_SkipPrevious2.default, null)
             ),
             _react2.default.createElement(
               _IconButton2.default,
-              { 'aria-label': 'Play/pause' },
-              _react2.default.createElement(_PlayArrow2.default, { className: classes.playIcon })
+              {
+                disabled: !isLoadedMetadata,
+                'aria-label': 'Play/pause',
+                onClick: this.handlePlayClick
+              },
+              isPaused ? _react2.default.createElement(_PlayArrow2.default, { className: classes.playIcon }) : _react2.default.createElement(_Pause2.default, { className: classes.playIcon })
             ),
             _react2.default.createElement(
               _IconButton2.default,
-              { 'aria-label': 'Next' },
+              { disabled: !isLoadedMetadata, 'aria-label': 'Next' },
               theme.direction === 'rtl' ? _react2.default.createElement(_SkipPrevious2.default, null) : _react2.default.createElement(_SkipNext2.default, null)
             )
           )
@@ -41675,7 +41987,7 @@ var AudioPlayer = function (_Component) {
         _react2.default.createElement(
           'div',
           { className: classes.progress },
-          _react2.default.createElement(_LinearProgress2.default, { variant: 'buffer', value: 20, valueBuffer: 60 })
+          _react2.default.createElement(_LinearProgress2.default, { variant: 'buffer', value: progress, valueBuffer: buffered })
         )
       );
     }

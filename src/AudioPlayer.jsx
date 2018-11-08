@@ -8,8 +8,29 @@ import CardMedia from '@material-ui/core/CardMedia';
 import IconButton from '@material-ui/core/IconButton';
 import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import PauseIcon from '@material-ui/icons/Pause';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import AudioNative from './AudioNative';
+
+
+function getTimeLeft(currentTime, duration) {
+  const timeLeft = duration - currentTime;
+  let s = timeLeft % 60;
+  let m = Math.floor(timeLeft / 60) % 60;
+  s = s < 10 ? `0${s}` : s;
+  m = m < 10 ? `0${m}` : m;
+  const time = `${m}:${s}`;
+  return time;
+}
+function getFormattedTime(currentTime) {
+  let s = currentTime % 60;
+  let m = parseInt((currentTime / 60) % 60, 10);
+  s = s < 10 ? `0${s}` : s;
+  m = m < 10 ? `0${m}` : m;
+  const time = `${m}:${s}`;
+  return time;
+}
 
 const styles = theme => ({
   card: {
@@ -40,19 +61,143 @@ const styles = theme => ({
     flex: 1,
     paddingTop: 101,
     paddingRight: 80
+  },
+  hiddenPlayer: {
+    display: 'none'
   }
 });
-
 
 class AudioPlayer extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      isLoadedMetadata: false,
+      isPaused: true,
+      elapsedTime: '00:00',
+      duration: '00:00',
+      buffered: 0,
+      progress: 0
+    };
+    // Audio Events
+    this.setElmRef = this.setElmRef.bind(this);
+    this.handleAudioError = this.handleAudioError.bind(this);
+    this.handleAudioCanPlay = this.handleAudioCanPlay.bind(this);
+    this.handleAudioCanPlayThrough = this.handleAudioCanPlayThrough.bind(this);
+    this.handleAudioPlay = this.handleAudioPlay.bind(this);
+    this.handleAudioAbort = this.handleAudioAbort.bind(this);
+    this.handleAudioEnded = this.handleAudioEnded.bind(this);
+    this.handleAudioPause = this.handleAudioPause.bind(this);
+    this.handleAudioSeeked = this.handleAudioSeeked.bind(this);
+    this.handleAudioLoadedMetadata = this.handleAudioLoadedMetadata.bind(this);
+    this.handleAudioTimeUpdate = this.handleAudioTimeUpdate.bind(this);
+    // Player Events
+    this.handlePlayClick = this.handlePlayClick.bind(this);
+  }
+  componentDidMount() {
+    window.player = this;
+    this.eAudio.addEventListener('error', this.handleAudioError);
+
+    // When enough of the file has downloaded to start playing
+    this.eAudio.addEventListener('canplay', this.handleAudioCanPlay);
+
+    // When enough of the file has downloaded to play the entire file
+    this.eAudio.addEventListener('canplaythrough', this.handleAudioCanPlayThrough);
+
+    // When audio play starts
+    this.eAudio.addEventListener('play', this.handleAudioPlay);
+
+    // When unloading the audio player (switching to another src)
+    this.eAudio.addEventListener('abort', this.handleAudioAbort);
+
+    // When the file has finished playing to the end
+    this.eAudio.addEventListener('ended', this.handleAudioEnded);
+
+    // When the user pauses playback
+    this.eAudio.addEventListener('pause', this.handleAudioPause);
+
+    // When the user drags the time indicator to a new time
+    this.eAudio.addEventListener('seeked', this.handleAudioSeeked);
+
+    this.eAudio.addEventListener('loadedmetadata', this.handleAudioLoadedMetadata);
+
+    this.eAudio.addEventListener('timeupdate', this.handleAudioTimeUpdate);
+  }
+  setElmRef(elm) {
+    this.eAudio = elm;
+  }
+  handleAudioError(e) {
+    // this.props.onError(e);
+    console.log('error', e, this.eAudio);
+  }
+  handleAudioCanPlay(e) {
+    // this.props.onCanPlay(e);
+    console.log('canplay', e, this.eAudio);
+  }
+  handleAudioCanPlayThrough(e) {
+    // this.props.onCanPlayThrough(e);
+    console.log('canplaythrough', e, this.eAudio);
+  }
+  handleAudioPlay() {
+    this.setState({ isPaused: false });
+  }
+  handleAudioAbort(e) {
+    // this.props.onAbort(e);
+    console.log('abort', e, this.eAudio);
+  }
+  handleAudioEnded(e) {
+    // this.props.onEnded(e);
+    console.log('ended', e, this.eAudio);
+  }
+  handleAudioPause() {
+    this.setState({ isPaused: true });
+  }
+  handleAudioSeeked(e) {
+    // this.props.onSeeked(e);
+    console.log('seeked', e, this.eAudio);
+  }
+  handleAudioLoadedMetadata(e) {
+    // this.props.onLoadedMetadata(e);
+    console.log('loadedmetadata', e);
+    let duration = parseInt(this.eAudio.duration, 10);
+    duration = getFormattedTime(duration);
+    this.setState({ isLoadedMetadata: true, duration });
+  }
+  handleAudioTimeUpdate() {
+    const duration = parseInt(this.eAudio.duration, 10);
+    const currentTime = parseInt(this.eAudio.currentTime, 10);
+    const elapsedTime = getFormattedTime(currentTime, duration);
+
+    let buffered = (this.eAudio.buffered.end(0) * 100) / duration;
+    buffered = parseFloat(buffered.toFixed(2));
+
+    let progress = (currentTime * 100) / duration;
+    progress = parseFloat(progress.toFixed(2));
+
+    this.setState({ elapsedTime, progress, buffered });
+  }
+  handlePlayClick() {
+    if (this.state.isPaused) {
+      this.eAudio.play();
+    } else {
+      this.eAudio.pause();
+    }
+  }
+  handlePauseClick() {
+    this.eAudio.pause();
   }
   render() {
     const { classes, theme } = this.props;
+    const {
+      isLoadedMetadata,
+      isPaused,
+      elapsedTime,
+      duration,
+      progress,
+      buffered
+    } = this.state;
     return (
       <Card className={classes.card}>
+        <AudioNative setElmRef={this.setElmRef} />
         <CardMedia
           className={classes.cover}
           image="https://i.imgur.com/aQs9CC6.jpg"
@@ -64,23 +209,31 @@ class AudioPlayer extends Component {
               Live From Space
             </Typography>
             <Typography variant="subtitle1" color="textSecondary">
-              Mac Miller
+              Mac Miller {elapsedTime} / {duration}
             </Typography>
           </CardContent>
           <div className={classes.controls}>
-            <IconButton aria-label="Previous">
+            <IconButton disabled={!isLoadedMetadata} aria-label="Previous">
               {theme.direction === 'rtl' ? <SkipNextIcon /> : <SkipPreviousIcon />}
             </IconButton>
-            <IconButton aria-label="Play/pause">
-              <PlayArrowIcon className={classes.playIcon} />
+            <IconButton
+              disabled={!isLoadedMetadata}
+              aria-label="Play/pause"
+              onClick={this.handlePlayClick}
+            >
+              {
+                isPaused ?
+                  <PlayArrowIcon className={classes.playIcon} /> :
+                  <PauseIcon className={classes.playIcon} />
+              }
             </IconButton>
-            <IconButton aria-label="Next">
+            <IconButton disabled={!isLoadedMetadata} aria-label="Next">
               {theme.direction === 'rtl' ? <SkipPreviousIcon /> : <SkipNextIcon />}
             </IconButton>
           </div>
         </div>
         <div className={classes.progress}>
-          <LinearProgress variant="buffer" value={20} valueBuffer={60} />
+          <LinearProgress variant="buffer" value={progress} valueBuffer={buffered} />
         </div>
       </Card>
     );
