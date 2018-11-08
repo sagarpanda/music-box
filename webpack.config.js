@@ -8,22 +8,18 @@ const PUB_DIR = path.resolve(__dirname, 'public');
 const SRC_DIR = path.resolve(__dirname, 'src');
 
 function isDev() {
-  return process.env.NODE_ENV === 'dev';
+  return process.env.NODE_ENV === 'development';
 }
 
 function isProd() {
-  return process.env.NODE_ENV === 'prod';
+  return process.env.NODE_ENV === 'production';
 }
 
 function getPlugins() {
   let plugins = [
-    new ExtractTextPlugin('styles.css'),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor'
-    }),
-    new HtmlWebpackPlugin({
-      template: 'template.html'
-    })
+    new ExtractTextPlugin('styles.css')
+    // new webpack.optimize.CommonsChunkPlugin({ name: 'vendor' }),
+    // new HtmlWebpackPlugin({ template: 'template.html' })
   ];
   if (isProd()) {
     plugins = plugins.concat([new UglifyJsPlugin()]);
@@ -45,7 +41,7 @@ const config = {
     extensions: ['.js', '.jsx']
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.jsx$/,
         include: SRC_DIR,
@@ -62,7 +58,7 @@ const config = {
             {
               loader: 'css-loader',
               options: {
-                modules: true,
+                // modules: true,
                 sourceMap: isDev()
               }
             }
@@ -77,7 +73,7 @@ const config = {
             {
               loader: 'css-loader',
               options: {
-                modules: true,
+                // modules: true,
                 sourceMap: isDev()
               }
             },
