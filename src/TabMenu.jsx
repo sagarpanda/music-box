@@ -24,14 +24,16 @@ class TabMenu extends Component {
     return (
       <Tabs
         className={classes.tabs}
-        value={0}
+        value={this.props.selectedTabIndex}
         indicatorColor="primary"
         textColor="primary"
         centered
+        onChange={this.props.onChange}
       >
         <Tab label="Playlist" />
-        <Tab label="Favourite" />
         <Tab label="Album" />
+        <Tab label="Favourite" />
+        <Tab label="Recent" />
       </Tabs>
     );
   }

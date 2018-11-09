@@ -4,7 +4,6 @@ import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import TabMenu from './TabMenu';
 
 const styles = {
   appBar: {
@@ -28,7 +27,7 @@ class Header extends Component {
           <Typography className={classes.logo} variant="h6" color="inherit">
             Music Box
           </Typography>
-          <TabMenu />
+          { this.props.children }
         </Toolbar>
       </AppBar>
     );

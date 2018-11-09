@@ -42,6 +42,7 @@ function extractFileList(elm) {
 function extractDownload(elm) {
   let label = elm.text;
   const url = elm.href;
+  const id = url.split('/')[4];
   const nodes = elm.firstChild ? elm.firstChild.childNodes : [];
   const ob = {};
   if (nodes[0] && nodes[0].textContent) {
@@ -56,7 +57,12 @@ function extractDownload(elm) {
   if (nodes[8] && nodes[8].textContent) {
     ob.hits = nodes[8].textContent;
   }
-  return { label, url, ...ob };
+  return {
+    label,
+    url,
+    id,
+    ...ob
+  };
 }
 
 function crawler(argUrl, { querySelector, forScreen }) {

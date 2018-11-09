@@ -12,18 +12,32 @@ import ImageIcon from '@material-ui/icons/Image';
 import IconButton from '@material-ui/core/IconButton';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import AddIcon from '@material-ui/icons/Add';
+import InboxIcon from '@material-ui/icons/MoveToInbox';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import StarBorder from '@material-ui/icons/StarBorder';
+import Collapse from '@material-ui/core/Collapse';
 
-const styles = {
+const styles = theme => ({
   tabContent: {
     flex: 1,
     overflow: 'auto'
+  },
+  nested: {
+    paddingLeft: theme.spacing.unit * 4
   }
-};
+});
 
-class Playlist extends Component {
+class Album extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      open: true
+    };
+    this.handleClick = this.handleClick.bind(this);
+  }
+  handleClick() {
+    this.setState(state => ({ open: !state.open }));
   }
   render() {
     const { classes, data } = this.props;
@@ -31,25 +45,23 @@ class Playlist extends Component {
       <Fragment>
         <div className={classes.tabContent}>
           <List component="nav">
-            {
-              data.map(item => (
-                <ListItem button key={item.title} onClick={() => this.props.onChange(item)}>
-                  <ListItemIcon><Avatar> <ImageIcon /></Avatar></ListItemIcon>
-                  <ListItemText primary={item.title} />
-                  <ListItemSecondaryAction>
-                    <IconButton aria-label="Duration">
-                      <Typography variant="caption" color="inherit">3:40</Typography>
-                    </IconButton>
-                    <IconButton aria-label="Favorite">
-                      <FavoriteIcon />
-                    </IconButton>
-                    <IconButton aria-label="Add to Playlist">
-                      <AddIcon />
-                    </IconButton>
-                  </ListItemSecondaryAction>
+            <ListItem button onClick={this.handleClick}>
+              <ListItemIcon>
+                <InboxIcon />
+              </ListItemIcon>
+              <ListItemText inset primary="Inbox" />
+              {this.state.open ? <ExpandLess /> : <ExpandMore />}
+            </ListItem>
+            <Collapse in={this.state.open} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                <ListItem button className={classes.nested}>
+                  <ListItemIcon>
+                    <StarBorder />
+                  </ListItemIcon>
+                  <ListItemText inset primary="Starred" />
                 </ListItem>
-              ))
-            }
+              </List>
+            </Collapse>
           </List>
         </div>
       </Fragment>
@@ -57,12 +69,12 @@ class Playlist extends Component {
   }
 }
 
-Playlist.defaultProps = {
+Album.defaultProps = {
   data: [],
   onChange: () => {}
 };
 
-Playlist.propTypes = {
+Album.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   classes: PropTypes.object.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
@@ -70,4 +82,4 @@ Playlist.propTypes = {
   onChange: PropTypes.func
 };
 
-export default withStyles(styles)(Playlist);
+export default withStyles(styles)(Album);

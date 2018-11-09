@@ -18,16 +18,17 @@ class AudioNative extends Component {
   }
   render() {
     const { classes } = this.props;
-    const path = 'http://data2.mymp3singer.fun/files/sfd144/71725/Manzoor%20E%20Khuda_64(MyMp3Singer).mp3';
+    // const path = 'http://data2.mymp3singer.fun/files/sfd144/71725/Manzoor%20E%20Khuda_64(MyMp3Singer).mp3';
+    const path = this.props.source;
     return (
       <div className={classes.hiddenPlayer}>
         <audio
           controls
           preload="false"
-          ref={this.props.setElmRef}
+          ref={this.props.setAudioElmRef}
         >
           <track kind="captions" />
-          <source src={path} type="audio/mpeg" />
+          <source ref={this.props.setAudioSrcElmRef} src={path} type="audio/mpeg" />
           Your browser does not support the audio element.
         </audio>
       </div>
@@ -38,8 +39,9 @@ class AudioNative extends Component {
 AudioNative.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   classes: PropTypes.object.isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
-  setElmRef: PropTypes.func.isRequired
+  setAudioElmRef: PropTypes.func.isRequired,
+  setAudioSrcElmRef: PropTypes.func.isRequired,
+  source: PropTypes.string.isRequired
 };
 
 export default withStyles(styles)(AudioNative);

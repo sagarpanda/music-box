@@ -14,7 +14,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import AudioNative from './AudioNative';
 
 
-function getTimeLeft(currentTime, duration) {
+/* function getTimeLeft(currentTime, duration) {
   const timeLeft = duration - currentTime;
   let s = timeLeft % 60;
   let m = Math.floor(timeLeft / 60) % 60;
@@ -22,7 +22,7 @@ function getTimeLeft(currentTime, duration) {
   m = m < 10 ? `0${m}` : m;
   const time = `${m}:${s}`;
   return time;
-}
+} */
 function getFormattedTime(currentTime) {
   let s = currentTime % 60;
   let m = parseInt((currentTime / 60) % 60, 10);
@@ -38,6 +38,7 @@ const styles = theme => ({
   },
   details: {
     display: 'flex',
+    flex: 1,
     flexDirection: 'column'
   },
   content: {
@@ -59,11 +60,10 @@ const styles = theme => ({
   },
   progress: {
     flex: 1,
-    paddingTop: 101,
-    paddingRight: 80
+    marginLeft: 5
   },
-  hiddenPlayer: {
-    display: 'none'
+  duration: {
+    padding: 12
   }
 });
 
@@ -72,6 +72,7 @@ class AudioPlayer extends Component {
     super(props);
     this.state = {
       isLoadedMetadata: false,
+      playOnLoadMeta: false,
       isPaused: true,
       elapsedTime: '00:00',
       duration: '00:00',
@@ -79,7 +80,8 @@ class AudioPlayer extends Component {
       progress: 0
     };
     // Audio Events
-    this.setElmRef = this.setElmRef.bind(this);
+    this.setAudioElmRef = this.setAudioElmRef.bind(this);
+    this.setAudioSrcElmRef = this.setAudioSrcElmRef.bind(this);
     this.handleAudioError = this.handleAudioError.bind(this);
     this.handleAudioCanPlay = this.handleAudioCanPlay.bind(this);
     this.handleAudioCanPlayThrough = this.handleAudioCanPlayThrough.bind(this);
@@ -122,8 +124,17 @@ class AudioPlayer extends Component {
 
     this.eAudio.addEventListener('timeupdate', this.handleAudioTimeUpdate);
   }
-  setElmRef(elm) {
+  componentDidUpdate() {
+    if (this.eAudioSrc.src !== this.props.source) {
+      this.eAudioSrc.src = this.props.source;
+      this.eAudio.load();
+    }
+  }
+  setAudioElmRef(elm) {
     this.eAudio = elm;
+  }
+  setAudioSrcElmRef(elm) {
+    this.eAudioSrc = elm;
   }
   handleAudioError(e) {
     // this.props.onError(e);
@@ -143,31 +154,56 @@ class AudioPlayer extends Component {
   handleAudioAbort(e) {
     // this.props.onAbort(e);
     console.log('abort', e, this.eAudio);
+    this.setState({
+      isLoadedMetadata: false,
+      playOnLoadMeta: true,
+      isPaused: true,
+      elapsedTime: '00:00',
+      progress: 0,
+      buffered: 0
+    });
   }
   handleAudioEnded(e) {
-    // this.props.onEnded(e);
     console.log('ended', e, this.eAudio);
+    this.eAudio.pause();
+    /* this.setState({
+      playOnLoadMeta: true,
+      isPaused: true,
+      elapsedTime: '00:00',
+      progress: 0,
+      buffered: 100
+    }) ;*/
   }
   handleAudioPause() {
     this.setState({ isPaused: true });
   }
   handleAudioSeeked(e) {
-    // this.props.onSeeked(e);
     console.log('seeked', e, this.eAudio);
   }
   handleAudioLoadedMetadata(e) {
-    // this.props.onLoadedMetadata(e);
+    const { playOnLoadMeta } = this.state;
     console.log('loadedmetadata', e);
     let duration = parseInt(this.eAudio.duration, 10);
     duration = getFormattedTime(duration);
-    this.setState({ isLoadedMetadata: true, duration });
+    this.setState({
+      isLoadedMetadata: true,
+      duration,
+      playOnLoadMeta: false
+    }, () => {
+      if (playOnLoadMeta) {
+        this.eAudio.play();
+      }
+    });
   }
   handleAudioTimeUpdate() {
     const duration = parseInt(this.eAudio.duration, 10);
     const currentTime = parseInt(this.eAudio.currentTime, 10);
     const elapsedTime = getFormattedTime(currentTime, duration);
 
-    let buffered = (this.eAudio.buffered.end(0) * 100) / duration;
+    let buffered = 0;
+    if (this.eAudio.buffered.length > 0) {
+      buffered = (this.eAudio.buffered.end(0) * 100) / duration;
+    }
     buffered = parseFloat(buffered.toFixed(2));
 
     let progress = (currentTime * 100) / duration;
@@ -197,23 +233,27 @@ class AudioPlayer extends Component {
     } = this.state;
     return (
       <Card className={classes.card}>
-        <AudioNative setElmRef={this.setElmRef} />
+        <AudioNative
+          setAudioElmRef={this.setAudioElmRef}
+          setAudioSrcElmRef={this.setAudioSrcElmRef}
+          source={this.props.source}
+        />
         <CardMedia
           className={classes.cover}
-          image="https://i.imgur.com/aQs9CC6.jpg"
+          image={this.props.image}
           title="Live from space album cover"
         />
         <div className={classes.details}>
           <CardContent className={classes.content}>
-            <Typography component="h5" variant="h5">
-              Live From Space
+            <Typography component="h5" variant="title">
+              {this.props.title} &nbsp;
             </Typography>
             <Typography variant="subtitle1" color="textSecondary">
-              Mac Miller {elapsedTime} / {duration}
+              {this.props.artist} {elapsedTime} / {duration}
             </Typography>
           </CardContent>
           <div className={classes.controls}>
-            <IconButton disabled={!isLoadedMetadata} aria-label="Previous">
+            <IconButton disabled={!isLoadedMetadata} aria-label="Previous" onClick={this.props.onPrev}>
               {theme.direction === 'rtl' ? <SkipNextIcon /> : <SkipPreviousIcon />}
             </IconButton>
             <IconButton
@@ -227,24 +267,43 @@ class AudioPlayer extends Component {
                   <PauseIcon className={classes.playIcon} />
               }
             </IconButton>
-            <IconButton disabled={!isLoadedMetadata} aria-label="Next">
+            <IconButton disabled={!isLoadedMetadata} aria-label="Next" onClick={this.props.onNext}>
               {theme.direction === 'rtl' ? <SkipPreviousIcon /> : <SkipNextIcon />}
             </IconButton>
+            <LinearProgress className={classes.progress} variant="buffer" value={progress} valueBuffer={buffered} />
+            <Typography
+              className={classes.duration}
+              component="span"
+              variant="subheading"
+              color="textSecondary"
+            >
+              {duration}
+            </Typography>
           </div>
-        </div>
-        <div className={classes.progress}>
-          <LinearProgress variant="buffer" value={progress} valueBuffer={buffered} />
         </div>
       </Card>
     );
   }
 }
 
+AudioPlayer.defaultProps = {
+  image: 'https://i.imgur.com/aQs9CC6.jpg',
+  artist: '',
+  onNext: () => {},
+  onPrev: () => {}
+};
+
 AudioPlayer.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   classes: PropTypes.object.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
-  theme: PropTypes.object.isRequired
+  theme: PropTypes.object.isRequired,
+  source: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  artist: PropTypes.string,
+  image: PropTypes.string,
+  onNext: PropTypes.func,
+  onPrev: PropTypes.func
 };
 
 export default withStyles(styles, { withTheme: true })(AudioPlayer);
