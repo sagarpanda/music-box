@@ -25,7 +25,7 @@ class Header extends Component {
       <AppBar className={classes.appBar} position="static" color="default">
         <Toolbar>
           <Typography className={classes.logo} variant="h6" color="inherit">
-            Music Box
+            mubox
           </Typography>
           { this.props.children }
         </Toolbar>
@@ -34,9 +34,14 @@ class Header extends Component {
   }
 }
 
+Header.defaultProps = {
+  children: null
+};
+
 Header.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  children: PropTypes.node
 };
 
 export default withStyles(styles)(Header);

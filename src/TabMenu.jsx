@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import BottomNavigation from '@material-ui/core/BottomNavigation';
+import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
+import RestoreIcon from '@material-ui/icons/Restore';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import LocationOnIcon from '@material-ui/icons/QueueMusic';
+import LibraryMusicIcon from '@material-ui/icons/LibraryMusic';
 
 const styles = {
   tabs: {
-    marginTop: 15
-  },
-  tabContent: {
-    flex: 1,
-    overflow: 'auto'
+    backgroundColor: '#f5f5f5'
   }
 };
 
@@ -22,19 +22,16 @@ class TabMenu extends Component {
   render() {
     const { classes } = this.props;
     return (
-      <Tabs
-        className={classes.tabs}
+      <BottomNavigation
         value={this.props.selectedTabIndex}
-        indicatorColor="primary"
-        textColor="primary"
-        centered
         onChange={this.props.onChange}
+        className={classes.tabs}
       >
-        <Tab label="Album" />
-        <Tab label="Playlist" />
-        <Tab label="Favourite" />
-        <Tab label="Recent" />
-      </Tabs>
+        <BottomNavigationAction label="Album" value={0} icon={<LibraryMusicIcon />} />
+        <BottomNavigationAction label="Playlist" value={1} icon={<LocationOnIcon />} />
+        <BottomNavigationAction label="Favorites" value={2} icon={<FavoriteIcon />} />
+        <BottomNavigationAction label="Recents" value={3} icon={<RestoreIcon />} />
+      </BottomNavigation>
     );
   }
 }

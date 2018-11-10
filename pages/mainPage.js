@@ -1,5 +1,5 @@
 function song(req, res) {
-  res.render('mainPage', { title: 'Music Box' });
+  res.render('mainPage', { title: 'mubox' });
 }
 
 export default song;
