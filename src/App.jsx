@@ -32,7 +32,7 @@ class App extends React.PureComponent {
           title: 'Side to Side',
           artist: 'Ariana Grande',
           image: 'https://pm1.narvii.com/6329/b3fa4068df8d44333c78e685d38d4c448215191c_hq.jpg',
-          size: '3.63mb'
+          size: '3.63 mb'
         },
         {
           id: '12',
@@ -40,7 +40,7 @@ class App extends React.PureComponent {
           title: 'Work from Home',
           artist: 'Fifth Harmony',
           image: 'https://upload.wikimedia.org/wikipedia/en/thumb/f/f5/Work_From_Home_%28featuring_Ty_Dolla_%24ign%29_%28Official_Single_Cover%29_by_Fifth_Harmony.png/220px-Work_From_Home_%28featuring_Ty_Dolla_%24ign%29_%28Official_Single_Cover%29_by_Fifth_Harmony.png',
-          size: '3.36mb'
+          size: '3.36 mb'
         }
       ],
       playingId: '11',

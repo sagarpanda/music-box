@@ -36,7 +36,8 @@ function getFormattedTime(currentTime) {
 
 const styles = theme => ({
   card: {
-    display: 'flex'
+    display: 'flex',
+    borderTop: '#d6d6d6'
   },
   details: {
     display: 'flex',
@@ -44,8 +45,12 @@ const styles = theme => ({
     flexDirection: 'column'
   },
   content: {
+    display: 'flex',
     flex: '1 0 auto',
-    paddingBottom: 0
+    paddingBottom: 0,
+    paddingTop: 8,
+    paddingLeft: 14,
+    paddingRight: 14
   },
   cover: {
     width: 151
@@ -55,6 +60,9 @@ const styles = theme => ({
     alignItems: 'center',
     paddingLeft: theme.spacing.unit,
     paddingBottom: theme.spacing.unit
+  },
+  buttonCtrl: {
+    padding: 6
   },
   playIcon: {
     height: 38,
@@ -236,22 +244,28 @@ class AudioPlayer extends Component {
         <CardMedia
           className={classes.cover}
           image={this.props.image}
-          title="Live from space album cover"
+          title={this.props.title}
         />
         <div className={classes.details}>
           <CardContent className={classes.content}>
             <Typography component="h5" variant="title">
-              {this.props.title} &nbsp;
+              {this.props.title}
             </Typography>
             <Typography variant="subtitle1" color="textSecondary">
-              {this.props.artist}
+              &nbsp;- {this.props.artist}
             </Typography>
           </CardContent>
           <div className={classes.controls}>
-            <IconButton disabled={!isLoadedMetadata} aria-label="Previous" onClick={this.props.onPrev}>
+            <IconButton
+              className={classes.buttonCtrl}
+              disabled={!isLoadedMetadata}
+              aria-label="Previous"
+              onClick={this.props.onPrev}
+            >
               {theme.direction === 'rtl' ? <SkipNextIcon /> : <SkipPreviousIcon />}
             </IconButton>
             <IconButton
+              className={classes.buttonCtrl}
               disabled={!isLoadedMetadata}
               aria-label="Play/pause"
               onClick={this.handlePlayClick}
@@ -262,7 +276,12 @@ class AudioPlayer extends Component {
                   <PauseIcon className={classes.playIcon} />
               }
             </IconButton>
-            <IconButton disabled={!isLoadedMetadata} aria-label="Next" onClick={this.props.onNext}>
+            <IconButton
+              className={classes.buttonCtrl}
+              disabled={!isLoadedMetadata}
+              aria-label="Next"
+              onClick={this.props.onNext}
+            >
               {theme.direction === 'rtl' ? <SkipPreviousIcon /> : <SkipNextIcon />}
             </IconButton>
             <LinearProgress className={classes.progress} variant="buffer" value={progress} valueBuffer={buffered} />

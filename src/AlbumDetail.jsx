@@ -16,7 +16,7 @@ const styles = {
     margin: 12
   },
   media: {
-    height: 200
+    height: 250
   },
   button: {
     marginLeft: 12,

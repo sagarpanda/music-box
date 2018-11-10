@@ -9,9 +9,12 @@ import CardMedia from '@material-ui/core/CardMedia';
 
 const styles = {
   card: {
-    width: 200,
+    width: 122,
     float: 'left',
     margin: 12
+  },
+  cardContent: {
+    padding: 5
   },
   cardLabel: {
     textOverflow: 'ellipsis',
@@ -49,7 +52,7 @@ class Album extends Component {
                   image={item.image}
                   title={item.name}
                 />
-                <CardContent>
+                <CardContent className={classes.cardContent}>
                   <Typography
                     gutterBottom
                     variant="subtitle2"
