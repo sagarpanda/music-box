@@ -9,10 +9,11 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ImageIcon from '@material-ui/icons/Image';
-import PlayCircleFilledWhiteIcon from '@material-ui/icons/PlayCircleFilledWhite';
+// import PlayCircleFilledWhiteIcon from '@material-ui/icons/PlayCircleFilledWhite';
 import IconButton from '@material-ui/core/IconButton';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import AddIcon from '@material-ui/icons/PlaylistAdd';
+import MusicIcon from './icons/Music';
 
 const styles = {
   tabContent: {
@@ -39,7 +40,7 @@ class Playlist extends Component {
                     <Avatar>
                       {
                         this.props.playingId === item.id ?
-                          <PlayCircleFilledWhiteIcon /> :
+                          <MusicIcon /> :
                           <ImageIcon />
                       }
                     </Avatar>

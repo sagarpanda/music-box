@@ -2,6 +2,7 @@ import Promise from 'bluebird';
 import axios from 'axios';
 import { JSDOM } from 'jsdom';
 import mongoose from 'mongoose';
+import ldFindIndex from 'lodash/findIndex';
 
 const { ObjectID, Schema } = mongoose;
 
@@ -41,7 +42,7 @@ function extractFileList(elm) {
 
 function extractDownload(elm) {
   let label = elm.text;
-  const url = elm.href;
+  const url = elm.href.replace('%2C', '');
   const id = url.split('/')[4];
   const nodes = elm.firstChild ? elm.firstChild.childNodes : [];
   const ob = {};
@@ -90,20 +91,42 @@ function crawler(argUrl, { querySelector, forScreen }) {
 
 function crawlerResponse(data, option) {
   return new Promise((resolve) => {
-    const ax = data.map((item) => {
-      const encode = Buffer.from(JSON.stringify(item)).toString('base64');
-      return axios.get(`http://localhost:3001/api/webCrawler/songDownloadLinks/${encode}`);
-    });
-    axios.all(ax).then((responses) => {
-      const dd = responses.map((item, idx) => ({
-        ...data[idx],
-        movie: option.label,
-        movieUrl: option.url,
-        url: item.data[0].url
-      }));
-      Model.create({ url: option.url, response: dd, created_at: new Date() }, (error) => {
-        if (error) { resolve([]); } else { resolve(dd); }
+    const querySelector = dom => dom.window.document.querySelector('.fhd').nextElementSibling.querySelectorAll('a');
+    const crawlers = data.map(item => crawler(item.url, { querySelector }));
+
+    Promise.all(crawlers).then((rs) => {
+      const ob = rs.map((item, idx) => {
+        const rtn = {
+          ...data[idx],
+          movie: option.label,
+          movieUrl: option.url,
+          url: item[0].url
+        };
+        return rtn;
       });
+      resolve(ob);
+    });
+  });
+}
+
+function checkCategoryList(list) {
+  const filteredList = list.filter((item) => {
+    const type = item.url.split('/')[3];
+    return type === 'categorylist';
+  });
+  return new Promise((resolve) => {
+    const querySelector = dom => dom.window.document.querySelector('.catList').querySelectorAll('a');
+    const crawlers = filteredList.map(item => crawler(item.url, { querySelector }));
+    Promise.all(crawlers).then((rs) => {
+      const ob = list.map((item) => {
+        let rtn = item;
+        const idx = ldFindIndex(filteredList, { url: item.url });
+        if (idx > -1) {
+          rtn = { ...item, url: rs[idx][0].url };
+        }
+        return rtn;
+      });
+      resolve(ob);
     });
   });
 }
@@ -119,6 +142,8 @@ function movies(req, res) {
     if (records.length === 0) {
       console.log('movies api - crawling');
       crawler(url, { querySelector, forScreen: 'filelist' }).then((data) => {
+        return checkCategoryList(data);
+      }).then((data) => {
         Model.create({ url, response: data, created_at: new Date() }, (error) => {
           if (error) { res.json([]); } else { res.json(data); }
         });
@@ -141,7 +166,9 @@ function movieSongs(req, res) {
     if (records.length === 0) {
       console.log('movieSongs api - crawling');
       crawler(infoJson.url, { querySelector, forScreen: 'download' })
-        .then(data => crawlerResponse(data, infoJson))
+        .then((data) => {
+          return crawlerResponse(data, infoJson);
+        })
         .then(data => res.json(data));
     } else {
       console.log('movieSongs api - no crawling');

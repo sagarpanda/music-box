@@ -58,8 +58,8 @@ class Album extends Component {
   fetchAlbums() {
     this.loading = true;
     const pageNum = this.state.pageNum + 1;
-    if (pageNum < 24) {
-      axios.get(`/api/webCrawler/movies/${pageNum}`)
+    if (pageNum < 13) {
+      axios.get(`/api/xtpull/movies/${pageNum}`)
         .then((response) => {
           const albums = response.data.map(item => ({
             name: ldTrim(item.label),
@@ -81,7 +81,7 @@ class Album extends Component {
     const ob = { ...this.state.albums[idx] };
     const opt = { url: ob.songsUrl, label: ob.name };
     const encode = window.btoa(JSON.stringify(opt));
-    axios.get(`/api/webCrawler/movieSongs/${encode}`)
+    axios.get(`/api/xtpull/movieSongs/${encode}`)
       .then((response) => {
         const songs = response.data.map((item) => {
           const {

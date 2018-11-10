@@ -15,9 +15,9 @@ app.use(express.static(`${__dirname}/public`));
 
 
 app.get('/', mainPage);
-app.get('/api/webCrawler/movies/:page', webCrawler.movies);
-app.get('/api/webCrawler/movieSongs/:info', webCrawler.movieSongs);
-app.get('/api/webCrawler/songDownloadLinks/:info', webCrawler.songDownloadLinks);
+app.get('/api/xtpull/movies/:page', webCrawler.movies);
+app.get('/api/xtpull/movieSongs/:info', webCrawler.movieSongs);
+app.get('/api/xtpull/songDownloadLinks/:info', webCrawler.songDownloadLinks);
 
 
 app.get('/test', crawleTestPage.test);
