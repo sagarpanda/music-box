@@ -9,9 +9,10 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ImageIcon from '@material-ui/icons/Image';
+import PlayCircleFilledWhiteIcon from '@material-ui/icons/PlayCircleFilledWhite';
 import IconButton from '@material-ui/core/IconButton';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import AddIcon from '@material-ui/icons/Add';
+import AddIcon from '@material-ui/icons/PlaylistAdd';
 
 const styles = {
   tabContent: {
@@ -34,18 +35,29 @@ class Playlist extends Component {
             {
               data.map(item => (
                 <ListItem button key={item.title} onClick={() => this.props.onChange(item)}>
-                  <ListItemIcon><Avatar> <ImageIcon /></Avatar></ListItemIcon>
+                  <ListItemIcon>
+                    <Avatar>
+                      {
+                        this.props.playingId === item.id ?
+                          <PlayCircleFilledWhiteIcon /> :
+                          <ImageIcon />
+                      }
+                    </Avatar>
+                  </ListItemIcon>
                   <ListItemText primary={item.title} />
                   <ListItemSecondaryAction>
-                    <IconButton aria-label="Duration">
-                      <Typography variant="caption" color="inherit">3:40</Typography>
+                    <IconButton aria-label="File Size">
+                      <Typography variant="caption" color="inherit">{item.size}</Typography>
                     </IconButton>
                     <IconButton aria-label="Favorite">
                       <FavoriteIcon />
                     </IconButton>
-                    <IconButton aria-label="Add to Playlist">
-                      <AddIcon />
-                    </IconButton>
+                    {
+                      !this.props.hideAddToPlaylist &&
+                      <IconButton aria-label="Add to Playlist">
+                        <AddIcon />
+                      </IconButton>
+                    }
                   </ListItemSecondaryAction>
                 </ListItem>
               ))
@@ -58,13 +70,16 @@ class Playlist extends Component {
 }
 
 Playlist.defaultProps = {
+  hideAddToPlaylist: false,
   data: [],
   onChange: () => {}
 };
 
 Playlist.propTypes = {
+  hideAddToPlaylist: PropTypes.bool,
   // eslint-disable-next-line react/forbid-prop-types
   classes: PropTypes.object.isRequired,
+  playingId: PropTypes.string.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
   data: PropTypes.array,
   onChange: PropTypes.func

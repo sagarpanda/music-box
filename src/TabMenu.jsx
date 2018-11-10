@@ -30,8 +30,8 @@ class TabMenu extends Component {
         centered
         onChange={this.props.onChange}
       >
-        <Tab label="Playlist" />
         <Tab label="Album" />
+        <Tab label="Playlist" />
         <Tab label="Favourite" />
         <Tab label="Recent" />
       </Tabs>
@@ -39,10 +39,11 @@ class TabMenu extends Component {
   }
 }
 
-
 TabMenu.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  selectedTabIndex: PropTypes.number.isRequired,
+  onChange: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(TabMenu);

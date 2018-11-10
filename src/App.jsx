@@ -28,43 +28,29 @@ class App extends React.PureComponent {
       currentPlaylist: [
         {
           id: '11',
-          source: 'http://dl2.djring.com/hd1.djring.com/320/490104/Bom+Diggy+Diggy+-+Jasmin+Walia+Zack+Knight%20(DJJOhAL.Com).mp3',
-          title: 'Bom Diggy Diggy (Sonu Ke Titu Ki Sweety)',
-          artist: 'Jasmin Walia, Zack Knight',
-          image: 'https://content.hungama.com/audio%20track/display%20image/300x300%20jpeg/3749390405.jpg'
+          source: 'http://mrsinger.in/siteuploads/files/sfd4/1892/Ariana%20Grande%20-%20Side%20To%20Side%20ft.%20Nicki%20Minaj(MrSinger.In).mp3',
+          title: 'Side to Side',
+          artist: 'Ariana Grande',
+          image: 'https://pm1.narvii.com/6329/b3fa4068df8d44333c78e685d38d4c448215191c_hq.jpg',
+          size: '3.63mb'
         },
         {
           id: '12',
-          source: 'https://mymp3singer.fun/files/download/type/320/id/66559',
-          title: 'Akh Lad Jaa',
-          artist: 'Loveyatri'
-        },
-        {
-          id: '13',
-          source: 'https://mymp3singer.fun/files/download/type/320/id/70555',
-          title: 'Proper Patola',
-          artist: 'Namaste England'
-        },
-        {
-          id: '15',
-          source: 'http://data2.mymp3singer.fun/files/sfd144/71776/Lori_320(MyMp3Singer).mp3',
-          title: 'Lori - Thugs of Hindostan',
-          artist: 'ab'
-        },
-        {
-          id: '14',
-          source: 'https://mymp3singer.fun/files/download/type/320/id/66580',
-          title: 'Aao Kabhi Haveli Pe',
-          artist: 'Stree'
+          source: 'http://mrsinger.in/siteuploads/files/sfd4/1904/Fifth%20Harmony%20-%20Work%20from%20Home%20ft.%20Ty%20Dolla(MrSinger.In).mp3',
+          title: 'Work from Home',
+          artist: 'Fifth Harmony',
+          image: 'https://upload.wikimedia.org/wikipedia/en/thumb/f/f5/Work_From_Home_%28featuring_Ty_Dolla_%24ign%29_%28Official_Single_Cover%29_by_Fifth_Harmony.png/220px-Work_From_Home_%28featuring_Ty_Dolla_%24ign%29_%28Official_Single_Cover%29_by_Fifth_Harmony.png',
+          size: '3.36mb'
         }
       ],
-      playingId: '15',
-      selectedTabIndex: 1
+      playingId: '11',
+      selectedTabIndex: 0
     };
     this.handleTabChange = this.handleTabChange.bind(this);
     this.handleNextPlay = this.handleNextPlay.bind(this);
     this.handlePrevPlay = this.handlePrevPlay.bind(this);
-    this.handleTrackChange = this.handleTrackChange.bind(this);
+    this.handleSongChange = this.handleSongChange.bind(this);
+    this.handleSongSelectInAlbum = this.handleSongSelectInAlbum.bind(this);
   }
 
   getCurrentPlayDetail() {
@@ -77,13 +63,20 @@ class App extends React.PureComponent {
     let component = null;
     if (this.state.selectedTabIndex === 0) {
       component = (
-        <Playlist
-          data={this.state.currentPlaylist}
-          onChange={this.handleTrackChange}
+        <Album
+          playingId={this.state.playingId}
+          onSongSelectInAlbum={this.handleSongSelectInAlbum}
         />
       );
     } else if (this.state.selectedTabIndex === 1) {
-      component = <Album />;
+      component = (
+        <Playlist
+          hideAddToPlaylist
+          playingId={this.state.playingId}
+          data={this.state.currentPlaylist}
+          onChange={this.handleSongChange}
+        />
+      );
     }
     return component;
   }
@@ -92,7 +85,11 @@ class App extends React.PureComponent {
     this.setState({ selectedTabIndex: tabIndex });
   }
 
-  handleTrackChange(option) {
+  handleSongSelectInAlbum(playingId, currentPlaylist) {
+    this.setState({ playingId, currentPlaylist });
+  }
+
+  handleSongChange(option) {
     this.setState({ playingId: option.id });
   }
 

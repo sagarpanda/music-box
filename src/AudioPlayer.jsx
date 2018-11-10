@@ -13,7 +13,9 @@ import SkipNextIcon from '@material-ui/icons/SkipNext';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import AudioNative from './AudioNative';
 
-
+function log() {
+  // console.log(a, b);
+}
 /* function getTimeLeft(currentTime, duration) {
   const timeLeft = duration - currentTime;
   let s = timeLeft % 60;
@@ -71,7 +73,7 @@ class AudioPlayer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoadedMetadata: false,
+      isLoadedMetadata: true,
       playOnLoadMeta: false,
       isPaused: true,
       elapsedTime: '00:00',
@@ -138,22 +140,22 @@ class AudioPlayer extends Component {
   }
   handleAudioError(e) {
     // this.props.onError(e);
-    console.log('error', e, this.eAudio);
+    log('error', e, this.eAudio);
   }
   handleAudioCanPlay(e) {
     // this.props.onCanPlay(e);
-    console.log('canplay', e, this.eAudio);
+    log('canplay', e, this.eAudio);
   }
   handleAudioCanPlayThrough(e) {
     // this.props.onCanPlayThrough(e);
-    console.log('canplaythrough', e, this.eAudio);
+    log('canplaythrough', e, this.eAudio);
   }
   handleAudioPlay() {
     this.setState({ isPaused: false });
   }
   handleAudioAbort(e) {
     // this.props.onAbort(e);
-    console.log('abort', e, this.eAudio);
+    log('abort', e, this.eAudio);
     this.setState({
       isLoadedMetadata: false,
       playOnLoadMeta: true,
@@ -164,25 +166,18 @@ class AudioPlayer extends Component {
     });
   }
   handleAudioEnded(e) {
-    console.log('ended', e, this.eAudio);
+    log('ended', e, this.eAudio);
     this.eAudio.pause();
-    /* this.setState({
-      playOnLoadMeta: true,
-      isPaused: true,
-      elapsedTime: '00:00',
-      progress: 0,
-      buffered: 100
-    }) ;*/
   }
   handleAudioPause() {
     this.setState({ isPaused: true });
   }
   handleAudioSeeked(e) {
-    console.log('seeked', e, this.eAudio);
+    log('seeked', e, this.eAudio);
   }
   handleAudioLoadedMetadata(e) {
     const { playOnLoadMeta } = this.state;
-    console.log('loadedmetadata', e);
+    log('loadedmetadata', e);
     let duration = parseInt(this.eAudio.duration, 10);
     duration = getFormattedTime(duration);
     this.setState({
@@ -249,7 +244,7 @@ class AudioPlayer extends Component {
               {this.props.title} &nbsp;
             </Typography>
             <Typography variant="subtitle1" color="textSecondary">
-              {this.props.artist} {elapsedTime} / {duration}
+              {this.props.artist}
             </Typography>
           </CardContent>
           <div className={classes.controls}>
@@ -277,7 +272,7 @@ class AudioPlayer extends Component {
               variant="subheading"
               color="textSecondary"
             >
-              {duration}
+              {elapsedTime} / {duration}
             </Typography>
           </div>
         </div>

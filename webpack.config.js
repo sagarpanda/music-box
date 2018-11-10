@@ -92,8 +92,7 @@ const config = {
           {
             loader: 'url-loader',
             options: {
-              limit: 8192,
-              prefix: 'zz'
+              limit: 8192
             }
           }
         ]
