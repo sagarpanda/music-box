@@ -169,7 +169,11 @@ function movieSongs(req, res) {
         .then((data) => {
           return crawlerResponse(data, infoJson);
         })
-        .then(data => res.json(data));
+        .then((data) => {
+          Model.create({ url: infoJson.url, response: data, created_at: new Date() }, (error) => {
+            if (error) { res.json([]); } else { res.json(data); }
+          });
+        });
     } else {
       console.log('movieSongs api - no crawling');
       res.json(records[0].response);
