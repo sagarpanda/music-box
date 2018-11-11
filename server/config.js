@@ -1,8 +1,10 @@
 /* eslint-disable no-template-curly-in-string */
+const mongoProd = `mongodb://${process.env.MONGO_CONN}`;
+const mongoDev = 'mongodb://localhost/test';
+
 module.exports = {
   PORT: process.env.PORT ? process.env.PORT : 3001,
-  // DB_CON: 'mongodb://localhost/test',
-  DB_CON: `mongodb://${process.env.DB_USER}:${process.env.DB_PWD}@ds159293.mlab.com:59293/${process.env.DB_NAME}`,
+  DB_CON: process.env.MONGO_CONN ? mongoProd : mongoDev,
   PUBLIC_DIR: 'public',
   API_HEAD: {
     // Website you wish to allow to connect

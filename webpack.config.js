@@ -2,7 +2,7 @@ const path = require('path');
 // const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const PUB_DIR = path.resolve(__dirname, 'public');
 const SRC_DIR = path.resolve(__dirname, 'src');
@@ -17,7 +17,10 @@ function isProd(env) {
 
 function getPlugins(env) {
   let plugins = [
-    new ExtractTextPlugin('styles.css')
+    new MiniCssExtractPlugin({
+      filename: '[name].css',
+      chunkFilename: '[id].css'
+    })
     // new webpack.optimize.CommonsChunkPlugin({ name: 'vendor' }),
     // new HtmlWebpackPlugin({ template: 'template.html' })
   ];
@@ -46,46 +49,39 @@ module.exports = (env, argv) => ({
       {
         test: /\.jsx$/,
         include: SRC_DIR,
-        loader: 'babel-loader',
-        query: {
-          presets: ['react', 'es2015', 'stage-2']
-        }
-      },
-      {
-        test: /\.css$/,
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: [
-            {
-              loader: 'css-loader',
-              options: {
-                // modules: true,
-                sourceMap: isDev(argv.mode)
-              }
-            }
-          ]
-        })
+        loader: 'babel-loader'
       },
       {
         test: /\.scss$/,
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: [
-            {
-              loader: 'css-loader',
-              options: {
-                // modules: true,
-                sourceMap: isDev(argv.mode)
-              }
-            },
-            {
-              loader: 'scss-loader',
-              options: {
-                sourceMap: isDev(argv.mode)
-              }
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: {
+              minimize: true,
+              sourceMap: isDev(argv.mode)
             }
-          ]
-        })
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: isDev(argv.mode)
+            }
+          }
+        ]
+      },
+      {
+        test: /\.css$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: {
+              // modules: true,
+              sourceMap: isDev(argv.mode)
+            }
+          }
+        ]
       },
       {
         test: /\.(png|jpg|gif)$/,

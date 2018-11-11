@@ -49194,9 +49194,9 @@ exports.default = (0, _styles.withStyles)(styles)(Album);
   !*** ./src/App.css ***!
   \*********************/
 /*! no static exports found */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-// removed by extract-text-webpack-plugin
+// extracted by mini-css-extract-plugin
 
 /***/ }),
 

@@ -2,8 +2,6 @@ language: node_js
 node_js:
   - "6"
 script:
-  - ls
-  - npm run build
   - chmod +x ./.travis/deploy.sh
 deploy:
   skip_cleanup: true
