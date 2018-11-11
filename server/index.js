@@ -1,12 +1,20 @@
 import path from 'path';
 import express from 'express';
-import mongoose from 'mongoose';
+import { MongoClient } from 'mongodb';
 import config from './config';
 import webCrawler from './api/webCrawler';
 import mainPage from './pages/mainPage';
 import crawleTestPage from './pages/crawleTestPage';
 
-mongoose.connect(config.DB_CON, { useNewUrlParser: true });
+// mongoose.connect(config.DB_CON, { useNewUrlParser: true });
+MongoClient.connect(config.DB_CON, (err, db) => {
+  if (err) {
+    console.log('Unable to connect to the mongoDB server. Error:', err);
+  } else {
+    console.log('DB Connection established');
+    // db.close();
+  }
+});
 
 const app = express();
 // const publicDir = path.resolve(`./../${config.PUBLIC_DIR}`);

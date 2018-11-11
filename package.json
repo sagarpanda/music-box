@@ -9,6 +9,7 @@
     "prod:start": "node dist",
     "prebuild": "rimraf public/ && rimraf dist",
     "build": "webpack --mode=production && babel server --out-dir dist --copy-files",
+    "postinstall": "npm run build",
     "test": ""
   },
   "author": "Sagar Panda<er.sagarpanda@gmail.com>",
@@ -34,6 +35,7 @@
     "jsdom": "^11.6.2",
     "lodash": "^4.17.11",
     "moment": "^2.18.1",
+    "mongodb": "^3.1.9",
     "mongoose": "^5.3.9",
     "prop-types": "^15.6.0",
     "pug": "^2.0.3",

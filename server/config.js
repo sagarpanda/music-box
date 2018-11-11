@@ -1,8 +1,8 @@
 /* eslint-disable no-template-curly-in-string */
 module.exports = {
   PORT: process.env.PORT ? process.env.PORT : 3001,
-  DB_CON: 'mongodb://localhost/test',
-  // DB_CON: 'mongodb://${DB_USER}:${DB_PWD}@ds054308.mlab.com:54308/${DB_NAME}',
+  // DB_CON: 'mongodb://localhost/test',
+  DB_CON: `mongodb://${process.env.DB_USER}:${process.env.DB_PWD}@ds159293.mlab.com:59293/${process.env.DB_NAME}`,
   PUBLIC_DIR: 'public',
   API_HEAD: {
     // Website you wish to allow to connect
