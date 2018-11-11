@@ -1,5 +1,5 @@
 const path = require('path');
-const webpack = require('webpack');
+// const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
@@ -7,27 +7,28 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const PUB_DIR = path.resolve(__dirname, 'public');
 const SRC_DIR = path.resolve(__dirname, 'src');
 
-function isDev() {
-  return process.env.NODE_ENV === 'development';
+function isDev(env) {
+  return env === 'development';
 }
 
-function isProd() {
-  return process.env.NODE_ENV === 'production';
+function isProd(env) {
+  return env === 'production';
 }
 
-function getPlugins() {
+function getPlugins(env) {
   let plugins = [
     new ExtractTextPlugin('styles.css')
     // new webpack.optimize.CommonsChunkPlugin({ name: 'vendor' }),
     // new HtmlWebpackPlugin({ template: 'template.html' })
   ];
-  if (isProd()) {
+  if (isProd(env)) {
     plugins = plugins.concat([new UglifyJsPlugin()]);
+    plugins = plugins.concat([new HtmlWebpackPlugin({ template: 'template.html' })]);
   }
   return plugins;
 }
 
-const config = {
+module.exports = (env, argv) => ({
   entry: {
     vendor: ['axios'],
     app: `${SRC_DIR}/index.jsx`
@@ -59,7 +60,7 @@ const config = {
               loader: 'css-loader',
               options: {
                 // modules: true,
-                sourceMap: isDev()
+                sourceMap: isDev(argv.mode)
               }
             }
           ]
@@ -74,13 +75,13 @@ const config = {
               loader: 'css-loader',
               options: {
                 // modules: true,
-                sourceMap: isDev()
+                sourceMap: isDev(argv.mode)
               }
             },
             {
               loader: 'scss-loader',
               options: {
-                sourceMap: isDev()
+                sourceMap: isDev(argv.mode)
               }
             }
           ]
@@ -99,8 +100,6 @@ const config = {
       }
     ]
   },
-  plugins: getPlugins(),
+  plugins: getPlugins(argv.mode),
   devServer: { inline: true, port: 3000 }
-};
-
-module.exports = config;
+});

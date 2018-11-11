@@ -1,5 +1,4 @@
 import Promise from 'bluebird';
-import axios from 'axios';
 import { JSDOM } from 'jsdom';
 import mongoose from 'mongoose';
 import ldFindIndex from 'lodash/findIndex';

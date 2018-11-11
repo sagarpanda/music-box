@@ -2,11 +2,13 @@
   "name": "music-box",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist",
   "scripts": {
     "start": "cross-env NODE_ENV=dev webpack-dev-server --hot",
-    "dev:start": "webpack --mode=development --watch | babel-watch --inspect server.js",
-    "build": "webpack --mode=production",
+    "dev:start": "webpack --mode=development --watch | babel-watch --inspect server",
+    "prod:start": "node dist",
+    "prebuild": "rimraf public/ && rimraf dist",
+    "build": "webpack --mode=production && babel server --out-dir dist --copy-files",
     "test": ""
   },
   "author": "Sagar Panda<er.sagarpanda@gmail.com>",
@@ -45,6 +47,7 @@
     "webpack-cli": "^3.1.2"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
     "babel-watch": "^2.0.7",
     "cross-env": "^5.1.1",
     "eslint": "^4.11.0",
@@ -52,7 +55,8 @@
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jsx-a11y": "^6.0.2",
     "eslint-plugin-react": "^7.5.1",
-    "html-webpack-plugin": "^2.30.1",
+    "html-webpack-plugin": "^3.2.0",
+    "rimraf": "^2.6.2",
     "uglifyjs-webpack-plugin": "^1.1.1",
     "webpack-dev-server": "^2.5.1"
   }

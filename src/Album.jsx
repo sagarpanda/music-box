@@ -5,6 +5,7 @@ import ldTrim from 'lodash/trim';
 import axios from 'axios';
 import AlbumGrid from './AlbumGrid';
 import AlbumDetail from './AlbumDetail';
+import apiConfig from './apiConfig';
 
 const styles = theme => ({
   tabContent: {
@@ -59,7 +60,7 @@ class Album extends Component {
     this.loading = true;
     const pageNum = this.state.pageNum + 1;
     if (pageNum < 13) {
-      axios.get(`/api/xtpull/movies/${pageNum}`)
+      axios.get(apiConfig.getApiUrl('movies', { pageNum }))
         .then((response) => {
           const albums = response.data.map(item => ({
             name: ldTrim(item.label),
@@ -81,7 +82,7 @@ class Album extends Component {
     const ob = { ...this.state.albums[idx] };
     const opt = { url: ob.songsUrl, label: ob.name };
     const encode = window.btoa(JSON.stringify(opt));
-    axios.get(`/api/xtpull/movieSongs/${encode}`)
+    axios.get(apiConfig.getApiUrl('movieSongs', { encode }))
       .then((response) => {
         const songs = response.data.map((item) => {
           const {
