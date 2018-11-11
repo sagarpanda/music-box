@@ -2,11 +2,12 @@ language: node_js
 node_js:
   - "6"
 script:
-  - git checkout master
+  - ls
   - npm run build
-  - chmod +x deploy.sh
+  - chmod +x ./.travis/deploy.sh
 deploy:
+  skip_cleanup: true
   provider: script
-  script: ./deploy.sh
+  script: ./.travis/deploy.sh
   on:
-    branch: master
+    branch: newlook
