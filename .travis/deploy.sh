@@ -7,7 +7,6 @@ setup_git() {
 
 upload_files() {
   if [ -d "public" ]; then
-    cp template.html public/index.html
     cd public
     git init
     git remote add origin-pages https://${GITHUB_TOKEN}@github.com/sagarpanda/music-box.git > /dev/null 2>&1
