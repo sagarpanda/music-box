@@ -8,7 +8,7 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
-import Playlist from './Playlist';
+import Playlist from './../playlist/Playlist';
 
 const styles = {
   card: {
@@ -37,7 +37,11 @@ class AlbumDetail extends Component {
     this.props.onSongSelect(a.id);
   }
   render() {
-    const { classes, album } = this.props;
+    const {
+      classes, album, onFavoriteClick, onAddToPlaylistClick
+    } = this.props;
+    const songs = album.songs || [];
+    const playlistData = songs.map(item => ({ ...item, albumId: album.id, albumName: album.name }));
     return (
       <Grid container>
         <Grid item>
@@ -68,8 +72,10 @@ class AlbumDetail extends Component {
           {
             album.songs && <Playlist
               playingId={this.props.playingId}
-              data={album.songs}
+              data={playlistData}
               onChange={this.handleTrackChange}
+              onFavoriteClick={onFavoriteClick}
+              onAddToPlaylistClick={onAddToPlaylistClick}
             />
           }
         </Grid>

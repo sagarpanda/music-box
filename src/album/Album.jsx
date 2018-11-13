@@ -5,7 +5,7 @@ import ldTrim from 'lodash/trim';
 import axios from 'axios';
 import AlbumGrid from './AlbumGrid';
 import AlbumDetail from './AlbumDetail';
-import apiConfig from './apiConfig';
+import apiConfig from './../apiConfig';
 
 const styles = theme => ({
   tabContent: {
@@ -30,7 +30,7 @@ class Album extends Component {
     super(props);
     this.state = {
       // shape: {
-      //   name, image, songsUrl,
+      //   id, name, image, songsUrl,
       //   songs: [ { id, source, title, artist, hits, size } ]
       // }
       albums: [],
@@ -63,6 +63,7 @@ class Album extends Component {
       axios.get(apiConfig.getApiUrl('movies', { pageNum }))
         .then((response) => {
           const albums = response.data.map(item => ({
+            id: item.id,
             name: ldTrim(item.label),
             image: item.img.replace('_1.jpg', '_3.jpg'),
             songsUrl: item.url,
@@ -80,7 +81,7 @@ class Album extends Component {
   }
   fetchSongs(idx) {
     const ob = { ...this.state.albums[idx] };
-    const opt = { url: ob.songsUrl, label: ob.name };
+    const opt = { url: ob.songsUrl, label: ob.name, id: ob.id };
     const encode = window.btoa(JSON.stringify(opt));
     axios.get(apiConfig.getApiUrl('movieSongs', { encode }))
       .then((response) => {
@@ -97,7 +98,9 @@ class Album extends Component {
             title: ldTrim(item.label),
             artist,
             hits,
-            size
+            size,
+            albumId: ob.id,
+            albumName: ob.name
           };
         });
         const albums = this.state.albums.map((item, i) => {
@@ -116,7 +119,9 @@ class Album extends Component {
   handleSongSelect(songId) {
     const { albums, selectedAlbumIndex } = this.state;
     const ob = { ...albums[selectedAlbumIndex] };
-    const songs = ob.songs.map(item => ({ ...item, image: ob.image }));
+    const songs = ob.songs.map(item => ({
+      ...item, image: ob.image, albumId: ob.id, albumName: ob.name
+    }));
     this.props.onSongSelectInAlbum(songId, songs);
   }
   handleAlbumSelect(index) {
@@ -127,7 +132,7 @@ class Album extends Component {
     });
   }
   render() {
-    const { classes } = this.props;
+    const { classes, onFavoriteClick, onAddToPlaylistClick } = this.props;
     return (
       <div
         className={classes.tabContent}
@@ -144,6 +149,8 @@ class Album extends Component {
               album={this.state.albums[this.state.selectedAlbumIndex]}
               onAlbumSelect={this.handleAlbumSelect}
               onSongSelect={this.handleSongSelect}
+              onFavoriteClick={onFavoriteClick}
+              onAddToPlaylistClick={onAddToPlaylistClick}
             />
         }
       </div>

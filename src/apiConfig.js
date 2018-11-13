@@ -13,8 +13,15 @@ function getApiUrl(name, options) {
   return baseUrl + ldTemplate(apis[name])(params);
 }
 
+function getLoggedInUser() {
+  // eslint-disable-next-line no-underscore-dangle
+  const u = JSON.parse(atob(window.__u));
+  return u.n || null;
+}
+
 const apiConfig = {
-  getApiUrl
+  getApiUrl,
+  loggedInUser: getLoggedInUser()
 };
 
 export default apiConfig;

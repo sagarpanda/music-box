@@ -1,6 +1,6 @@
 const path = require('path');
 // const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+// const HtmlWebpackPlugin = require('html-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
@@ -26,7 +26,7 @@ function getPlugins(env) {
   ];
   if (isProd(env)) {
     plugins = plugins.concat([new UglifyJsPlugin()]);
-    plugins = plugins.concat([new HtmlWebpackPlugin({ template: 'template.html' })]);
+    // plugins = plugins.concat([new HtmlWebpackPlugin({ template: 'template.html' })]);
   }
   return plugins;
 }

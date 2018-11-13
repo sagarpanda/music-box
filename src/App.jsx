@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 import ldFindIndex from 'lodash/findIndex';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import Header from './Header';
-import Playlist from './Playlist';
-import Album from './Album';
-import AudioPlayer from './AudioPlayer';
-import TabMenu from './TabMenu';
+import axios from 'axios';
+import Header from './common/Header';
+import Playlist from './playlist/Playlist';
+import Album from './album/Album';
+import AudioPlayer from './common/AudioPlayer';
+import TabMenu from './common/TabMenu';
 import './App.css';
 
 const styles = {
@@ -32,7 +33,9 @@ class App extends React.PureComponent {
           title: 'Side to Side',
           artist: 'Ariana Grande',
           image: 'https://pm1.narvii.com/6329/b3fa4068df8d44333c78e685d38d4c448215191c_hq.jpg',
-          size: '3.63 mb'
+          size: '3.63 mb',
+          albumId: '1',
+          albumName: 'My Album'
         },
         {
           id: '12',
@@ -40,7 +43,9 @@ class App extends React.PureComponent {
           title: 'Work from Home',
           artist: 'Fifth Harmony',
           image: 'https://upload.wikimedia.org/wikipedia/en/thumb/f/f5/Work_From_Home_%28featuring_Ty_Dolla_%24ign%29_%28Official_Single_Cover%29_by_Fifth_Harmony.png/220px-Work_From_Home_%28featuring_Ty_Dolla_%24ign%29_%28Official_Single_Cover%29_by_Fifth_Harmony.png',
-          size: '3.36 mb'
+          size: '3.36 mb',
+          albumId: '1',
+          albumName: 'My Album'
         }
       ],
       playingId: '11',
@@ -51,6 +56,8 @@ class App extends React.PureComponent {
     this.handlePrevPlay = this.handlePrevPlay.bind(this);
     this.handleSongChange = this.handleSongChange.bind(this);
     this.handleSongSelectInAlbum = this.handleSongSelectInAlbum.bind(this);
+    this.handleFavoriteClick = this.handleFavoriteClick.bind(this);
+    this.handleAddToPlaylistClick = this.handleAddToPlaylistClick.bind(this);
   }
 
   getCurrentPlayDetail() {
@@ -66,6 +73,8 @@ class App extends React.PureComponent {
         <Album
           playingId={this.state.playingId}
           onSongSelectInAlbum={this.handleSongSelectInAlbum}
+          onFavoriteClick={this.handleFavoriteClick}
+          onAddToPlaylistClick={this.handleAddToPlaylistClick}
         />
       );
     } else if (this.state.selectedTabIndex === 1) {
@@ -75,6 +84,7 @@ class App extends React.PureComponent {
           playingId={this.state.playingId}
           data={this.state.currentPlaylist}
           onChange={this.handleSongChange}
+          onFavoriteClick={this.handleFavoriteClick}
         />
       );
     }
@@ -91,6 +101,21 @@ class App extends React.PureComponent {
 
   handleSongChange(option) {
     this.setState({ playingId: option.id });
+  }
+
+  handleFavoriteClick(song) {
+  }
+
+  handleAddToPlaylistClick(song) {
+    const { currentPlaylist } = this.state;
+    /*
+    axios.post('/api/song/playlist', song)
+      .then(response => {
+        console.log('response', response);
+      })
+      .catch(err => console.log(err))
+    */
+    this.setState({ currentPlaylist: [...currentPlaylist, song] });
   }
 
   handleNextPlay() {

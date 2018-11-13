@@ -5,7 +5,15 @@ const mongoDev = 'mongodb://localhost/test';
 module.exports = {
   PORT: process.env.PORT ? process.env.PORT : 3001,
   DB_CON: process.env.MONGO_CONN ? mongoProd : mongoDev,
+
   PUBLIC_DIR: 'public',
+
+  SESSION_SECRET: process.env.SESSION_SECRET,
+
+  FACEBOOK_APP_ID: process.env.FACEBOOK_APP_ID,
+  FACEBOOK_APP_SECRET: process.env.FACEBOOK_APP_SECRET,
+  FACEBOOK_CALLBACK_URL: 'https://mubox1.herokuapp.com/auth/facebook/callback',
+
   API_HEAD: {
     // Website you wish to allow to connect
     'Access-Control-Allow-Origin': 'https://sagarpanda.github.io',
