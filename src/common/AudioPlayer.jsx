@@ -11,6 +11,7 @@ import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import PauseIcon from '@material-ui/icons/Pause';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import AudioNative from './AudioNative';
 
 function log() {
@@ -68,9 +69,13 @@ const styles = theme => ({
     height: 38,
     width: 38
   },
+  buttonProgress: {
+    position: 'absolute'
+  },
   progress: {
     flex: 1,
-    marginLeft: 5
+    marginLeft: 5,
+    cursor: 'pointer'
   },
   duration: {
     padding: 12
@@ -104,6 +109,7 @@ class AudioPlayer extends Component {
     this.handleAudioTimeUpdate = this.handleAudioTimeUpdate.bind(this);
     // Player Events
     this.handlePlayClick = this.handlePlayClick.bind(this);
+    this.handleProgressClick = this.handleProgressClick.bind(this);
   }
   componentDidMount() {
     window.player = this;
@@ -224,6 +230,12 @@ class AudioPlayer extends Component {
   handlePauseClick() {
     this.eAudio.pause();
   }
+  handleProgressClick(e) {
+    if (this.state.isLoadedMetadata) {
+      const seek = (this.eAudio.duration * (e.clientX - 286)) / e.target.offsetWidth;
+      this.eAudio.currentTime = seek;
+    }
+  }
   render() {
     const { classes, theme } = this.props;
     const {
@@ -275,6 +287,10 @@ class AudioPlayer extends Component {
                   <PlayArrowIcon className={classes.playIcon} /> :
                   <PauseIcon className={classes.playIcon} />
               }
+              {
+                !isLoadedMetadata &&
+                  <CircularProgress size={50} className={classes.buttonProgress} />
+              }
             </IconButton>
             <IconButton
               className={classes.buttonCtrl}
@@ -284,7 +300,7 @@ class AudioPlayer extends Component {
             >
               {theme.direction === 'rtl' ? <SkipPreviousIcon /> : <SkipNextIcon />}
             </IconButton>
-            <LinearProgress className={classes.progress} variant="buffer" value={progress} valueBuffer={buffered} />
+            <LinearProgress onClick={this.handleProgressClick} className={classes.progress} variant="buffer" value={progress} valueBuffer={buffered} />
             <Typography
               className={classes.duration}
               component="span"
