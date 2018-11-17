@@ -18,9 +18,9 @@ class Playlist extends Component {
     this.handleFavoriteClick = this.handleFavoriteClick.bind(this);
     this.handleAddToPlaylistClick = this.handleAddToPlaylistClick.bind(this);
   }
-  handleFavoriteClick(song) {
+  handleFavoriteClick(isChecked, song) {
     const { onFavoriteClick } = this.props;
-    onFavoriteClick(song);
+    onFavoriteClick(isChecked, song);
   }
   handleAddToPlaylistClick(song) {
     const { onAddToPlaylistClick } = this.props;
@@ -38,6 +38,7 @@ class Playlist extends Component {
                   key={item.title}
                   item={item}
                   playingId={this.props.playingId}
+                  playingStatus={this.props.playingStatus}
                   hideAddToPlaylist={this.props.hideAddToPlaylist}
                   onChange={this.props.onChange}
                   onFavoriteClick={this.handleFavoriteClick}
@@ -53,6 +54,8 @@ class Playlist extends Component {
 }
 
 Playlist.defaultProps = {
+  playingId: null,
+  playingStatus: null,
   hideAddToPlaylist: false,
   data: [],
   onChange: () => {},
@@ -64,7 +67,8 @@ Playlist.propTypes = {
   hideAddToPlaylist: PropTypes.bool,
   // eslint-disable-next-line react/forbid-prop-types
   classes: PropTypes.object.isRequired,
-  playingId: PropTypes.string.isRequired,
+  playingId: PropTypes.string,
+  playingStatus: PropTypes.string,
   // eslint-disable-next-line react/forbid-prop-types
   data: PropTypes.array,
   onChange: PropTypes.func,

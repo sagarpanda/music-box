@@ -2,6 +2,7 @@ import Promise from 'bluebird';
 import { JSDOM } from 'jsdom';
 import mongoose from 'mongoose';
 import ldFindIndex from 'lodash/findIndex';
+import User from './user';
 
 const { Schema } = mongoose;
 
@@ -29,6 +30,12 @@ function mymp3SingerCheck(urlStr, splitedUrl, argAllowTypes) {
 }
 */
 
+function getUserId(req) {
+  const { passport = {} } = req.session;
+  const userId = passport.user ? passport.user.id : null;
+  return userId;
+}
+
 function extract(elm) {
   const dd = { label: elm.text, url: elm.href };
   dd.label = dd.label.replace(/\t/g, '');
@@ -40,7 +47,7 @@ function extractFileList(elm) {
   const label = elm.text;
   const url = elm.href;
   const id = url.split('/')[4];
-  const img = elm.querySelector('img') ? elm.querySelector('img').getAttribute('src') : '';
+  const img = elm.querySelector('img') ? `https://mymp3singer.fun${elm.querySelector('img').getAttribute('src')}` : '';
   return {
     label, id, url, img
   };
@@ -67,6 +74,30 @@ function extractDownload(elm) {
   return {
     label, url, id, ...ob
   };
+}
+
+function checkFavorite(data, userId) {
+  return new Promise((resolve) => {
+    if (userId) {
+      User.model.findOne({ userId }, { _id: 0, __v: 0 }, (err, userRecord) => {
+        if (err) {
+          resolve([]);
+        } else {
+          const favIds = userRecord.favorites.map(item => item.trackId);
+          const favs = data.map((item) => {
+            const rtn = { ...item, isFavorite: false };
+            if (favIds.indexOf(item.id) > -1) {
+              rtn.isFavorite = true;
+            }
+            return rtn;
+          });
+          resolve(favs);
+        }
+      });
+    } else {
+      resolve(data);
+    }
+  });
 }
 
 function crawler(argUrl, { querySelector, forScreen }) {
@@ -170,6 +201,7 @@ function movies(req, res) {
 
 function movieSongs(req, res) {
   const { info } = req.params;
+  const userId = getUserId(req);
   const infoStr = Buffer.from(info, 'base64').toString();
   const infoJson = JSON.parse(infoStr);
   // const url = 'https://mymp3singer.fun/filelist/9348/dassehra_%282018%29/new2old/1';
@@ -180,11 +212,15 @@ function movieSongs(req, res) {
       crawler(infoJson.url, { querySelector, forScreen: 'download' })
         .then(data => crawlerResponse(data, infoJson))
         .then(data => saveCrawledData(infoJson.url, data))
+        .then(data => checkFavorite(data, userId))
         .then((data) => {
           res.json(data);
         });
     } else { // movieSongs api - no crawling
-      res.json(records[0].response);
+      checkFavorite(records[0].response, userId)
+        .then((data) => {
+          res.json(data);
+        });
     }
   });
 }

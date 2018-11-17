@@ -32,13 +32,18 @@ class AlbumDetail extends Component {
     super(props);
     this.state = {};
     this.handleTrackChange = this.handleTrackChange.bind(this);
+    this.handleAddToPlaylistClick = this.handleAddToPlaylistClick.bind(this);
   }
   handleTrackChange(a) {
-    this.props.onSongSelect(a.id);
+    this.props.onSongSelect(a.trackId);
+  }
+  handleAddToPlaylistClick(song) {
+    const { album, onAddToPlaylistClick } = this.props;
+    onAddToPlaylistClick({ ...song, image: album.image })
   }
   render() {
     const {
-      classes, album, onFavoriteClick, onAddToPlaylistClick
+      classes, album, onFavoriteClick
     } = this.props;
     const songs = album.songs || [];
     const playlistData = songs.map(item => ({ ...item, albumId: album.id, albumName: album.name }));
@@ -72,10 +77,11 @@ class AlbumDetail extends Component {
           {
             album.songs && <Playlist
               playingId={this.props.playingId}
+              playingStatus={this.props.playingStatus}
               data={playlistData}
               onChange={this.handleTrackChange}
               onFavoriteClick={onFavoriteClick}
-              onAddToPlaylistClick={onAddToPlaylistClick}
+              onAddToPlaylistClick={this.handleAddToPlaylistClick}
             />
           }
         </Grid>
@@ -85,12 +91,15 @@ class AlbumDetail extends Component {
 }
 
 AlbumDetail.defaultProps = {
+  playingId: null,
+  playingStatus: null,
   onSongSelect: () => {},
   onAlbumSelect: () => {}
 };
 
 AlbumDetail.propTypes = {
-  playingId: PropTypes.string.isRequired,
+  playingId: PropTypes.string,
+  playingStatus: PropTypes.string,
   // eslint-disable-next-line react/forbid-prop-types
   classes: PropTypes.object.isRequired,
   // eslint-disable-next-line react/forbid-prop-types

@@ -40,6 +40,7 @@ class Album extends Component {
     this.loading = false;
     this.handleAlbumSelect = this.handleAlbumSelect.bind(this);
     this.handleSongSelect = this.handleSongSelect.bind(this);
+    this.handleFavoriteClick = this.handleFavoriteClick.bind(this);
   }
   componentDidMount() {
     window.album = this;
@@ -90,15 +91,17 @@ class Album extends Component {
             id,
             artist,
             hits,
-            size
+            size,
+            isFavorite
           } = item;
           return {
-            id,
+            trackId: id,
             source: item.url,
             title: ldTrim(item.label),
             artist,
             hits,
             size,
+            isFavorite,
             albumId: ob.id,
             albumName: ob.name
           };
@@ -131,6 +134,27 @@ class Album extends Component {
       }
     });
   }
+  handleFavoriteClick(isChecked, track) {
+    const { onFavoriteClick } = this.props;
+    const { selectedAlbumIndex, albums } = this.state;
+    const newAlbums = albums.map((obA, i) => {
+      if (selectedAlbumIndex === i) {
+        const songs = obA.songs.map((obB) => {
+          if (obB.trackId === track.trackId) {
+            return { ...obB, isFavorite: isChecked };
+          } else {
+            return obB;
+          }
+        });
+        return { ...obA, songs };
+      } else {
+        return obA;
+      }
+    });
+    this.setState({ albums: newAlbums }, () => {
+      onFavoriteClick(isChecked, track);
+    });
+  }
   render() {
     const { classes, onFavoriteClick, onAddToPlaylistClick } = this.props;
     return (
@@ -146,10 +170,11 @@ class Album extends Component {
             /> :
             <AlbumDetail
               playingId={this.props.playingId}
+              playingStatus={this.props.playingStatus}
               album={this.state.albums[this.state.selectedAlbumIndex]}
               onAlbumSelect={this.handleAlbumSelect}
               onSongSelect={this.handleSongSelect}
-              onFavoriteClick={onFavoriteClick}
+              onFavoriteClick={this.handleFavoriteClick}
               onAddToPlaylistClick={onAddToPlaylistClick}
             />
         }
@@ -159,11 +184,14 @@ class Album extends Component {
 }
 
 Album.defaultProps = {
+  playingId: null,
+  playingStatus: null,
   onSongSelectInAlbum: () => {}
 };
 
 Album.propTypes = {
-  playingId: PropTypes.string.isRequired,
+  playingId: PropTypes.string,
+  playingStatus: PropTypes.string,
   // eslint-disable-next-line react/forbid-prop-types
   classes: PropTypes.object.isRequired,
   onSongSelectInAlbum: PropTypes.func

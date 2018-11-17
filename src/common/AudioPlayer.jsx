@@ -86,8 +86,8 @@ class AudioPlayer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoadedMetadata: true,
-      playOnLoadMeta: false,
+      isLoadedMetadata: false,
+      playOnLoadMeta: true,
       isPaused: true,
       elapsedTime: '00:00',
       duration: '00:00',
@@ -165,7 +165,9 @@ class AudioPlayer extends Component {
     log('canplaythrough', e, this.eAudio);
   }
   handleAudioPlay() {
-    this.setState({ isPaused: false });
+    this.setState({ isPaused: false }, () => {
+      this.props.onPlayPauseToggle('play');
+    });
   }
   handleAudioAbort(e) {
     // this.props.onAbort(e);
@@ -184,7 +186,9 @@ class AudioPlayer extends Component {
     this.eAudio.pause();
   }
   handleAudioPause() {
-    this.setState({ isPaused: true });
+    this.setState({ isPaused: true }, () => {
+      this.props.onPlayPauseToggle('pause');
+    });
   }
   handleAudioSeeked(e) {
     log('seeked', e, this.eAudio);
@@ -320,7 +324,8 @@ AudioPlayer.defaultProps = {
   image: 'https://i.imgur.com/aQs9CC6.jpg',
   artist: '',
   onNext: () => {},
-  onPrev: () => {}
+  onPrev: () => {},
+  onPlayPauseToggle: () => {}
 };
 
 AudioPlayer.propTypes = {
@@ -333,7 +338,8 @@ AudioPlayer.propTypes = {
   artist: PropTypes.string,
   image: PropTypes.string,
   onNext: PropTypes.func,
-  onPrev: PropTypes.func
+  onPrev: PropTypes.func,
+  onPlayPauseToggle: PropTypes.func
 };
 
 export default withStyles(styles, { withTheme: true })(AudioPlayer);

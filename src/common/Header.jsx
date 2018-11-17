@@ -21,6 +21,9 @@ const styles = {
   logo: {
     flex: 1
   },
+  userButton: {
+    marginTop: -10
+  },
   orangeAvatar: {
     color: '#fff',
     backgroundColor: deepOrange[500]
@@ -53,6 +56,7 @@ class Header extends Component {
     return (
       <Fragment>
         <IconButton
+          className={classes.userButton}
           buttonRef={(node) => { this.anchorEl = node; }}
           onClick={this.handleToggle}
         >
