@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -8,11 +9,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 
 const styles = {
-  card: {
-    width: 122,
-    float: 'left',
-    margin: 12
-  },
+  card: { },
   cardContent: {
     padding: 5
   },
@@ -38,35 +35,36 @@ class Album extends Component {
   render() {
     const { classes } = this.props;
     return (
-      <Fragment>
+      <Grid container spacing={24}>
         {
           this.props.albums.map((item, idx) => (
-            <Card
-              className={classes.card}
-              key={item.name}
-              onClick={() => this.props.onAlbumSelect(idx)}
-            >
-              <CardActionArea>
-                <CardMedia
-                  className={classes.media}
-                  image={item.image}
-                  title={item.name}
-                />
-                <CardContent className={classes.cardContent}>
-                  <Typography
-                    gutterBottom
-                    variant="subtitle2"
-                    component="h2"
-                    className={classes.cardLabel}
-                  >
-                    { item.name }
-                  </Typography>
-                </CardContent>
-              </CardActionArea>
-            </Card>
+            <Grid item xs={6} sm={3} md={2} key={item.name}>
+              <Card
+                className={classes.card}
+                onClick={() => this.props.onAlbumSelect(idx)}
+              >
+                <CardActionArea>
+                  <CardMedia
+                    className={classes.media}
+                    image={item.image}
+                    title={item.name}
+                  />
+                  <CardContent className={classes.cardContent}>
+                    <Typography
+                      gutterBottom
+                      variant="subtitle2"
+                      component="h2"
+                      className={classes.cardLabel}
+                    >
+                      { item.name }
+                    </Typography>
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            </Grid>
           ))
         }
-      </Fragment>
+      </Grid>
     );
   }
 }

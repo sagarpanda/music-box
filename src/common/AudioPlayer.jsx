@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import Hidden from '@material-ui/core/Hidden';
 import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -257,19 +258,23 @@ class AudioPlayer extends Component {
           setAudioSrcElmRef={this.setAudioSrcElmRef}
           source={this.props.source}
         />
-        <CardMedia
-          className={classes.cover}
-          image={this.props.image}
-          title={this.props.title}
-        />
+        <Hidden smDown>
+          <CardMedia
+            className={classes.cover}
+            image={this.props.image}
+            title={this.props.title}
+          />
+        </Hidden>
         <div className={classes.details}>
           <CardContent className={classes.content}>
             <Typography component="h5" variant="title">
               {this.props.title}
             </Typography>
-            <Typography variant="subtitle1" color="textSecondary">
-              &nbsp;- {this.props.artist}
-            </Typography>
+            <Hidden smDown>
+              <Typography variant="subtitle1" color="textSecondary">
+                &nbsp;- {this.props.artist}
+              </Typography>
+            </Hidden>
           </CardContent>
           <div className={classes.controls}>
             <IconButton

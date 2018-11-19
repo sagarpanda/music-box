@@ -7,23 +7,12 @@ import AlbumGrid from './AlbumGrid';
 import AlbumDetail from './AlbumDetail';
 import apiConfig from './../apiConfig';
 
-const styles = theme => ({
+const styles = {
   tabContent: {
-    padding: 12,
+    padding: 22,
     overflow: 'auto'
-  },
-  nested: {
-    paddingLeft: theme.spacing.unit * 4
-  },
-  card: {
-    width: 250,
-    float: 'left',
-    margin: 12
-  },
-  media: {
-    height: 200
   }
-});
+};
 
 class Album extends Component {
   constructor(props) {

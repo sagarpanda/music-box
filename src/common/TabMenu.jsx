@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
+import Hidden from '@material-ui/core/Hidden';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import RestoreIcon from '@material-ui/icons/Restore';
@@ -29,15 +30,19 @@ class TabMenu extends Component {
       index = 0;
     }
     return (
-      <BottomNavigation
-        value={index}
-        className={classes.tabs}
-      >
-        <BottomNavigationAction component={Link} to="/album" label="Album" value={0} icon={<LibraryMusicIcon />} />
-        <BottomNavigationAction component={Link} to="/playlist" label="Playlist" value={1} icon={<LocationOnIcon />} />
-        <BottomNavigationAction component={Link} to="/favorites" label="Favorites" value={2} icon={<FavoriteIcon />} />
-        { /*<BottomNavigationAction component={Link} to="/recents" label="Recents" value={3} icon={<RestoreIcon />} />*/ }
-      </BottomNavigation>
+      <Fragment>
+        <Hidden smDown>
+          <BottomNavigation
+            value={index}
+            className={classes.tabs}
+          >
+            <BottomNavigationAction component={Link} to="/album" label="Album" value={0} icon={<LibraryMusicIcon />} />
+            <BottomNavigationAction component={Link} to="/playlist" label="Playlist" value={1} icon={<LocationOnIcon />} />
+            <BottomNavigationAction component={Link} to="/favorites" label="Favorites" value={2} icon={<FavoriteIcon />} />
+            { /*<BottomNavigationAction component={Link} to="/recents" label="Recents" value={3} icon={<RestoreIcon />} />*/ }
+          </BottomNavigation>
+        </Hidden>
+      </Fragment>
     );
   }
 }
