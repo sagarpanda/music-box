@@ -72,12 +72,12 @@ class PlayItem extends Component {
     }
     return (
       <ListItem button>
-        <ListItemIcon onClick={() => onChange(item)}>
+        <ListItemIcon>
           <Avatar>
             { playing }
           </Avatar>
         </ListItemIcon>
-        <ListItemText primary={item.title} secondary={item.artist} />
+        <ListItemText primary={item.title} secondary={item.artist} onClick={() => onChange(item)} />
         <Hidden smDown>
           <ListItemSecondaryAction>
             <IconButton aria-label="File Size">
