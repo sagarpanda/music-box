@@ -55,7 +55,7 @@ function extractFileList(elm) {
 
 function extractDownload(elm) {
   let label = elm.text;
-  const url = elm.href.replace('%2C', '');
+  const url = elm.href.replace(/%2C/g, '');
   const id = url.split('/')[4];
   const nodes = elm.firstChild ? elm.firstChild.childNodes : [];
   const ob = {};
