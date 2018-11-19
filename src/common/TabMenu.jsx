@@ -5,7 +5,6 @@ import { withStyles } from '@material-ui/core/styles';
 import Hidden from '@material-ui/core/Hidden';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
-import RestoreIcon from '@material-ui/icons/Restore';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import LocationOnIcon from '@material-ui/icons/QueueMusic';
 import LibraryMusicIcon from '@material-ui/icons/LibraryMusic';
@@ -39,7 +38,6 @@ class TabMenu extends Component {
             <BottomNavigationAction component={Link} to="/album" label="Album" value={0} icon={<LibraryMusicIcon />} />
             <BottomNavigationAction component={Link} to="/playlist" label="Playlist" value={1} icon={<LocationOnIcon />} />
             <BottomNavigationAction component={Link} to="/favorites" label="Favorites" value={2} icon={<FavoriteIcon />} />
-            { /*<BottomNavigationAction component={Link} to="/recents" label="Recents" value={3} icon={<RestoreIcon />} />*/ }
           </BottomNavigation>
         </Hidden>
       </Fragment>

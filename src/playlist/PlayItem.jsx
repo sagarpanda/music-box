@@ -19,10 +19,7 @@ import AddIcon from '@material-ui/icons/PlaylistAdd';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
 import MoreIcon from '@material-ui/icons/MoreVert';
-import Tooltip from '@material-ui/core/Tooltip';
 import Drawer from '@material-ui/core/Drawer';
-import LocationOnIcon from '@material-ui/icons/QueueMusic';
-import LibraryMusicIcon from '@material-ui/icons/LibraryMusic';
 import MusicIcon from './../assets/Music';
 import apiConfig from './../apiConfig';
 
@@ -96,7 +93,7 @@ class PlayItem extends Component {
               }
             />
             {
-              !this.props.hideAddToPlaylist &&
+              !hideAddToPlaylist &&
               <IconButton aria-label="Add to Playlist" onClick={this.handleAddToPlaylistClick}>
                 <AddIcon />
               </IconButton>
@@ -121,7 +118,7 @@ class PlayItem extends Component {
                   <ListItemText primary={`File Size ${item.size}`} />
                 </ListItem>
                 {
-                  !this.props.hideAddToPlaylist &&
+                  !hideAddToPlaylist &&
                   <ListItem button onClick={this.handleAddToPlaylistClick}>
                     <ListItemText primary="Playlist" />
                     <ListItemSecondaryAction>
@@ -158,13 +155,26 @@ class PlayItem extends Component {
 }
 
 PlayItem.defaultProps = {
+  item: null,
+  playingId: null,
+  playingStatus: null,
+  hideAddToPlaylist: false,
   onFavoriteClick: () => {},
-  onAddToPlaylistClick: () => {}
+  onAddToPlaylistClick: () => {},
+  onChange: () => {}
 };
 
 PlayItem.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
+  classes: PropTypes.object.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  item: PropTypes.object,
+  playingId: PropTypes.string,
+  playingStatus: PropTypes.string,
+  hideAddToPlaylist: PropTypes.bool,
   onFavoriteClick: PropTypes.func,
-  onAddToPlaylistClick: PropTypes.func
+  onAddToPlaylistClick: PropTypes.func,
+  onChange: PropTypes.func
 };
 
 export default withStyles(styles)(PlayItem);
