@@ -113,7 +113,6 @@ class AudioPlayer extends Component {
     this.handleProgressClick = this.handleProgressClick.bind(this);
   }
   componentDidMount() {
-    window.player = this;
     this.eAudio.addEventListener('error', this.handleAudioError);
 
     // When enough of the file has downloaded to start playing

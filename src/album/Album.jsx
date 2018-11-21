@@ -32,7 +32,6 @@ class Album extends Component {
     this.handleFavoriteClick = this.handleFavoriteClick.bind(this);
   }
   componentDidMount() {
-    window.album = this;
     this.interval = setInterval(() => {
       if (!this.loading && this.state.selectedAlbumIndex === -1) {
         const h = (this.eAlbum.scrollHeight - this.eAlbum.offsetHeight) - 150;
@@ -44,7 +43,7 @@ class Album extends Component {
     this.fetchAlbums();
   }
   componentWillUnmount() {
-    window.clearInterval(this.interval);
+    clearInterval(this.interval);
   }
   fetchAlbums() {
     this.loading = true;
@@ -126,10 +125,12 @@ class Album extends Component {
   handleFavoriteClick(isChecked, track) {
     const { onFavoriteClick } = this.props;
     const { selectedAlbumIndex, albums } = this.state;
+    const imgTrack = track;
     const newAlbums = albums.map((obA, i) => {
       if (selectedAlbumIndex === i) {
         const songs = obA.songs.map((obB) => {
           if (obB.trackId === track.trackId) {
+            imgTrack.image = obA.image;
             return { ...obB, isFavorite: isChecked };
           } else {
             return obB;
@@ -141,7 +142,7 @@ class Album extends Component {
       }
     });
     this.setState({ albums: newAlbums }, () => {
-      onFavoriteClick(isChecked, track);
+      onFavoriteClick(isChecked, imgTrack);
     });
   }
   render() {
